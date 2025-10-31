@@ -8,10 +8,8 @@ from cryptography.fernet import Fernet
 from passlib.hash import argon2
 from passlib.hash import bcrypt_sha256
 
+class ArgonHasher:
 
-
-class UpdatedHasher:
-    """Upgrades the Dropbox for modern systems using Argon2"""
     def __init__(self, pepper_key: bytes):
         self.pepper = Fernet(pepper_key)
 
