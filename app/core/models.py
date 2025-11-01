@@ -12,48 +12,6 @@ from app.auth.models import User, UserSchema
 # Core Database Model Classes
 ################################################################################
 
-# define Model for Banks table
-class Project(db.Model):
-    __tablename__ = 'Projects'
-    order_no: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    totalCost: Mapped[float] = mapped_column(nullable=False)
-    components: Mapped[List['Component']] = relationship(viewonly=True)
-
-# define Model for Customers table
-class Customer(db.Model):
-    __tablename__ = 'Customers'
-    c_number:   Mapped[int] = mapped_column(primary_key=True)
-    name:       Mapped[str] = mapped_column(nullable=False)
-    phone:      Mapped[str] = mapped_column(nullable=False)
-    email:      Mapped[str] = mapped_column(nullable=False)
-    address:    Mapped[str] = mapped_column(nullable=False)
-    project_id: Mapped[int] = mapped_column(db.ForeignKey('Projects.order_no'))
-    project:   Mapped['Project'] = relationship()
-    
-# define Model for Banks table
-class Component(db.Model):
-    __tablename__ = 'Components'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
-    price: Mapped[float] = mapped_column(nullable=False)
-    type: Mapped[str] = mapped_column(nullable=False)
-    project_id: Mapped[int] = mapped_column(db.ForeignKey('Projects.order_no'))
-    project: Mapped['Project'] = relationship()
-
-
-################################################################################
-# JSON Schemas for Core Database Models
-################################################################################
-
-# TODO: define accompanying Marshmallow JSON schemas here to support REST API
-
-################################################################################
-# Utility Functions for Basic Database Tasks
-################################################################################
-
 def init_app_db():
     """Initialize database tables and add any default entries"""
     # completely drop all tables and re-create them from schemas

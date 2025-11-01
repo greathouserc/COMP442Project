@@ -7,7 +7,7 @@ appdir: str = os.path.dirname(os.path.abspath(__file__))
 # load any config options from the environment variable file
 load_dotenv(os.path.join(appdir, '.appenv'))
 # compute any needed default values that rely on this base directory
-default_db_path = os.path.join(appdir, 'example.db')
+default_db_path = os.path.join(appdir, 'user_table.db')
 
 # define a config singleton to be used in configuring apps
 class Config:

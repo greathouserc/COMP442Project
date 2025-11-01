@@ -13,6 +13,11 @@ def get_registration():
     form: RegisterForm = RegisterForm()
     return render_template('register.html', form=form)
 
+@bp.get('/login/')
+def get_login():
+    form: LoginForm = LoginForm()
+    return render_template('login.html', form=form)
+
 @bp.post('/register/')
 def post_registration():
     form: RegisterForm = RegisterForm()
@@ -22,12 +27,13 @@ def post_registration():
         new_user = User(email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
-        
+        return redirect(url_for('auth.get_login'))
+    else:
+        for field, error_msg in form.errors.items():
+            flash(f'{field}: {error_msg}')
+        return redirect(url_for('auth.get_registration'))
 
-@bp.get('/login/')
-def get_login():
-    form: LoginForm = LoginForm()
-    return render_template('login.html', form=form)
+        
 
 @bp.post('/login/')
 def post_login():
