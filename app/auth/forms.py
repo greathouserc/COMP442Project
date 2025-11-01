@@ -10,3 +10,11 @@ class LoginForm(FlaskForm):
     password: PasswordField = PasswordField('Password',
         validators=[InputRequired(), Length(min=MIN_PASSWORD_LENGTH)])
     submit: SubmitField = SubmitField("Login")
+
+class RegisterForm(FlaskForm):
+    email: EmailField = EmailField('Email',
+        validators=[InputRequired(), Email()])
+    password: PasswordField = PasswordField('Password',
+        validators=[InputRequired(), Length(min=MIN_PASSWORD_LENGTH)])
+    submit: SubmitField = SubmitField("Register")
+
