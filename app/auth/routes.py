@@ -52,12 +52,24 @@ def post_login():
         if user is not None and user.verify_password(password):
             login_user(user)
             # update the next url where the user should be redirected
-            if 'next' in request.args and request.args['next'].startswith('/'):
-                next = str(request.args['next'])
+            # only accept a 'next' target if it starts with '/' and matches a registered route
+            candidate = request.args.get('next', '')
+            if candidate and candidate.startswith('/'):
+                try:
+                    # try to match the candidate path against the app's URL map
+                    adapter = current_app.url_map.bind('', url_scheme=request.scheme)
+                    adapter.match(candidate)
+                    next = candidate
+                except Exception:
+                    # fallback to configured HOME_PAGE or the core index
+                    if 'HOME_PAGE' in current_app.config:
+                        next = str(current_app.config['HOME_PAGE'])
+                    else:
+                        next = url_for('core.index')
             elif 'HOME_PAGE' in current_app.config:
                 next = str(current_app.config['HOME_PAGE'])
             else:
-                next = '/'
+                next = url_for('core.index')
             return redirect(next)
         # if the email or password is incorrect, flash a message and redirect to get the form again
         else:

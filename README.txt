@@ -15,3 +15,5 @@ marshmallow_sqlalchemy
 flask_wtf
 argon2_cffi
 uvicorn
+email_validator
+sqlalchemy_utils
