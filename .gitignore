@@ -1,6 +1,10 @@
-# Byte-compiled / optimized / DLL files
+# Ignore __pycache__ directories anywhere in the repo
 __pycache__/
+**/__pycache__/
+# Ignore common compiled Python files
+*.py[cod]
 *.pyc
+*.pyo
 
 # Distribution / packaging
 .Python
@@ -40,4 +44,5 @@ ENV/
 env.bak/
 venv.bak/
 
-
+# Flask stuff:
+user_table.db
