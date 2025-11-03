@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+</head>
+<body>
+  <header>
+    <h1>Home</h1>
+    <nav>
+      <a class="button" href="{{ url_for('auth.route_logout') }}">Logout</a>
+    </nav>
+  </header>
+  <main>
+    <p>Welcome, <strong>{{ user.email }}</strong> — you're logged in.</p>
+  </main>
+</body>
+</html>

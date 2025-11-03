@@ -11,6 +11,10 @@ class User(UserMixin, db.Model):
     email: Mapped[str] = mapped_column(primary_key=True)
     password_hash: Mapped[bytes] = mapped_column(nullable=False)
 
+    def get_id(self) -> str:
+        """Returns the email address as the unique identifier for Flask-Login"""
+        return str(self.email)
+
     @property
     def pepper(self) -> Fernet:
         """Get the global pepper encryption system to encrypt hashes"""
