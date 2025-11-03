@@ -8,7 +8,8 @@ from app import db, ma
 
 class User(UserMixin, db.Model):
     __tablename__ = "Users"
-    email: Mapped[str] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(nullable=False)
     password_hash: Mapped[bytes] = mapped_column(nullable=False)
 
     @property
