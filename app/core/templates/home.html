@@ -4,23 +4,96 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
   <title>Home</title>
 </head>
 <body>
   <header>
     <body>
-      <ul>
-        <li><a class="active" href="#home">Home</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#about">About</a></li>
-        <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
-      
-      </ul>
+      <nav>
+        <ul>
+          <li><a class="active" href="#home">Home</a></li>
+          <li><a href="#news">News</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#about">About</a></li>
+          {% if user.is_authenticated == true %}
+          <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
+          {% else %}
+          <li style="float:right"><a href="{{ url_for('auth.get_login') }}">Login</a></li>
+          {% endif %}
+
+        
+        </ul>
+      </nav>
+
+      <!-- Sections -->
+
+      <!-- Splash Page Section -->
+
+      <section id="home">
+        <h1>Welcome to COMP442 Project</h1>
+        <p>This is the home page.</p>
+      </section>
+
+      <!-- Helpful References -->
+
+       <section class="contact" id="contact">
+        <div class="content">
+          {% if not user.is_authenticated %}
+            <div class="title"><span>Login or Sign Up</span></div>
+            <div class="contactMenu">
+                <div class="input1">
+                    <p>Create an account to access all features!</p>
+                    <div class="button">
+                        <a href="{{ url_for('auth.get_registration') }}" class="button">Sign Up Now</a>
+                    </div>
+                </div>
+            </div>
+          {% endif %}
+                <div class="input3">
+                    <div class="rightside1">
+                        <div class="title1">
+                            <span>
+                                Contact Us
+                            </span>
+                        </div>
+                        <div class="content1">
+                            A-143, 9th Floor, Sovereign 
+                            Corporate Tower, Sector-136, 
+                            Noida, Uttar Pradesh - 201305
+                        </div>
+                        <div class="title1">
+                            <span>More Information</span>
+                        </div>
+                        <div class="content1">
+                            Greetings to all the Geeks out there!
+                            We welcome you to the platform where we
+                            consistently strive to offer the best 
+                            of education. This platform has been 
+                            designed for every geek wishing to 
+                            expand their knowledge, share their 
+                            knowledge and is ready to grab their 
+                            dream job. We have millions of articles,
+                            live as well as online courses, thousands 
+                            of tutorials and much more just for the 
+                            geek inside you.Thank you for choosing 
+                            and supporting us!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </body>
   </header>
   <main>
-    <p>Welcome, <strong>{{ user.email }}</strong> — you're logged in.</p>
+    {% if user.is_authenticated %}
+      <p>Welcome, <strong>{{ user.email }}</strong> — you're logged in.</p>
+    {% else %}
+      <p>Welcome to our site! Please <a href="{{ url_for('auth.get_login') }}">login</a> or <a href="{{ url_for('auth.get_registration') }}">register</a> to access all features.</p>
+    {% endif %}
   </main>
 </body>
 </html>
