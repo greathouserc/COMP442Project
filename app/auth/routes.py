@@ -85,4 +85,4 @@ def post_login():
 @login_required
 def route_logout():
     logout_user()
-    return redirect(url_for('auth.get_login'))
+    return redirect(url_for('core.index'))
