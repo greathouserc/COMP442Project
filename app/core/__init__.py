@@ -7,3 +7,5 @@ templates_dir: str = os.path.join(bp_dir, 'templates')
 
 bp = Blueprint('core', __name__,
                template_folder=templates_dir)
+
+from app.core import routes
