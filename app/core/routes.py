@@ -6,3 +6,7 @@ from app.core import bp
 @bp.route('/')
 def index():
     return render_template('home.html', user=current_user)
+
+@bp.route('/resources/')
+def resources():
+    return render_template('resources.html', user=current_user)
