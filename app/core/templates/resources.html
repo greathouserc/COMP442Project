@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <title>Resources</title>
+</head>
+
+<body>
+    <header>
+
+        <body>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a class="active" href="#resources">Resources</a></li>
+                    <li><a href="#help">Get Help</a></li>
+                    <li><a href="#connect">Connect</a></li>
+                    {% if user.is_authenticated == true %}
+                    <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
+                    {% else %}
+                    <li style="float:right"><a href="{{ url_for('auth.get_login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </body>
+    </header>
+
+    <h1>Resources</h1>
+
+    <h2>General Advice</h2>
+
+    <iframe width="280" height="158" src="https://www.youtube.com/embed/Es5tyoL8AsU?si=X13t76E6rwasyW8a"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    </iframe>
+
+    <h2>Medical Advice</h2>
+
+    <iframe width="280" height="158" src="https://www.youtube.com/embed/hpgjwK_oQe0?si=UbAH9IZ6FBQXVWWn"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    </iframe>
+
+    <h2>Spiritual/Mental Wellbeing</h2>
+
+    <iframe width="280" height="158" src="https://www.youtube.com/embed/GvgfoAfE30E?si=tEC57WrjjvpV1P1L"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    </iframe>
+    <iframe width="280" height="158" src="https://www.youtube.com/embed/7w7LwdfNOSo?si=9n750VZt_gCmCZLm"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    </iframe>
+    <iframe width="280" height="158" src="https://www.youtube.com/embed/BfSzQWKpxHk?si=-yF2bpic97E9XXjN"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    </iframe>
+</body>
+
+</html>
