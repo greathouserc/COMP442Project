@@ -34,3 +34,25 @@ h2, p {
 #nav-bar ul li a.active {
   background-color: #04AA6D;
 }
+
+
+/* Login Page Nav Bar */
+#login-page #nav-bar {
+  background-color: #555555; 
+}
+
+#login-page #nav-bar ul li a {
+  color: white; 
+}
+
+#login-page #nav-bar ul li a:hover:not(.active) {
+  background-color: #333333; 
+}
+
+#login-page #nav-bar p {
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  padding: 20px 16px; 
+  margin: 0;
+}
