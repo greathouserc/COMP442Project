@@ -15,10 +15,10 @@
     <body>
       <nav id="nav-bar">
         <ul>
-          <li><a class="active" href="#home">Home</a></li>
-          <li><a href="resources">Resources</a></li>
-          <li><a href="help">Get Help</a></li>
-          <li><a href="connect">Connect</a></li>
+          <li><a class="active" href="/">Home</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/help">Get Help</a></li>
+          <li><a href="/connect">Connect</a></li>
           {% if user.is_authenticated == true %}
           <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
           {% else %}
