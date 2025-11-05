@@ -13,81 +13,103 @@
   <header>
 
     <body>
+
+      <!-- Nav Bar Section -->
       <nav id="nav-bar">
         <ul>
-          <li><a class="active" href="/">Home</a></li>
+          <li><a class="active" href="/home">Home</a></li>
           <li><a href="/resources">Resources</a></li>
-          <li><a href="/help">Get Help</a></li>
-          <li><a href="/connect">Connect</a></li>
+          <li><a href="#help">Get Help</a></li>
+          <li><a href="#connect">Connect</a></li>
+
           {% if user.is_authenticated == true %}
           <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
           {% else %}
           <li style="float:right"><a href="{{ url_for('auth.get_login') }}">Login</a></li>
           {% endif %}
 
-
         </ul>
       </nav>
 
-      <!-- Sections -->
-
-      <!-- Splash Page Section -->
-
-      <section id="home">
-        <h1>Welcome to COMP442 Project</h1>
-        <p>This is the home page.</p>
-      </section>
-
-      <!-- Helpful References -->
-
-      <section class="contact" id="contact">
-        <div class="content">
+      <!-- Landing Page Section -->
+      <section id="hero">
+        <div class="hero-content">
+          <h1>Welcome to Her Haven </h1>
+          <p>Supporting every step of your journey</p>
           {% if not user.is_authenticated %}
-          <div class="title"><span>Login or Sign Up</span></div>
-          <div class="contactMenu">
-            <div class="input1">
-              <p>Create an account or login to access all features!</p>
-              <div class="button">
-                <a href="{{ url_for('auth.get_login') }}" class="button">Sign Up Now</a>
-              </div>
-            </div>
+          <div class="cta-buttons">
+            <a href="{{ url_for('auth.get_login') }}" class="btn btn-primary">Login</a>
+            <a href="{{ url_for('auth.get_registration') }}" class="btn btn-secondary">Sign Up</a>
           </div>
           {% endif %}
-          <div class="input3">
-            <div class="rightside1">
-              <div class="title1">
-                <span>
-                  Contact Us
-                </span>
-              </div>
-              <div class="content1">
-                A-143, 9th Floor, Sovereign
-                Corporate Tower, Sector-136,
-                Noida, Uttar Pradesh - 201305
-              </div>
-              <div class="title1">
-                <span>More Information</span>
-              </div>
-              <div class="content1">
-                Greetings to all the Geeks out there!
-                We welcome you to the platform where we
-                consistently strive to offer the best
-                of education. This platform has been
-                designed for every geek wishing to
-                expand their knowledge, share their
-                knowledge and is ready to grab their
-                dream job. We have millions of articles,
-                live as well as online courses, thousands
-                of tutorials and much more just for the
-                geek inside you.Thank you for choosing
-                and supporting us!
-              </div>
+        </div>
+      </section>
+
+      <!-- Add a Section -->
+
+      <!-- Contact Form Section -->
+      <section id="contact">
+        <div class="container">
+          <h2>Get in Touch</h2>
+          <p>Have questions? We'd love to hear from you!</p>
+          
+          <form class="contact-form" method="POST" action="{{ url_for('core.contact') }}">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+              {{ form.name.label }}
+              {{ form.name(class="form-control") }}
+              {% if form.name.errors %}
+                {% for error in form.name.errors %}
+                  <span class="error">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
             </div>
-          </div>
-        </div>
-        </div>
+            
+            <div class="form-group">
+              {{ form.email.label }}
+              {{ form.email(class="form-control") }}
+              {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                  <span class="error">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
+            </div>
+            
+            <div class="form-group">
+              {{ form.subject.label }}
+              {{ form.subject(class="form-control") }}
+              {% if form.subject.errors %}
+                {% for error in form.subject.errors %}
+                  <span class="error">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
+            </div>
+            
+            <div class="form-group">
+              {{ form.message.label }}
+              {{ form.message(class="form-control", rows="5") }}
+              {% if form.message.errors %}
+                {% for error in form.message.errors %}
+                  <span class="error">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
+            </div>
+            
+            {{ form.submit(class="btn btn-primary") }}
+          </form>
 
-
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+      </section>
 
     </body>
   </header>
