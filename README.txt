@@ -1,6 +1,6 @@
 Git repo for COMP422 Project
 
-python installs needed to run servery.python
+python installs needed to run server.py
 
 pip install:
 
