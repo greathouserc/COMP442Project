@@ -12,10 +12,10 @@
     <header>
 
         <body>
-            <nav>
+            <nav id="nav-bar">
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a class="active" href="#resources">Resources</a></li>
+                    <li><a class="active" href="resources">Resources</a></li>
                     <li><a href="#help">Get Help</a></li>
                     <li><a href="#connect">Connect</a></li>
                     {% if user.is_authenticated == true %}
@@ -84,6 +84,23 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
     </iframe>
+
+    <h2>Need Help Getting Baby Essentials? Here are Some Organizations that Provide Free Resources</h2>
+    <ul>
+        <li><a href="https://www.fns.usda.gov/wic">A suborganization of the USDA, WIC provides support to
+                expecting mothers in need</a></li>
+        <li><a href="https://aeroflowbreastpumps.com/qualify-through-insurance">Aeroflow provides free resources to
+                pregnant moms with qualifying insurance</a></li>
+
+        <li>Both Walmart and Target offer free supplies when you start a baby registry with them, no purchase required
+        </li>
+        <ul>
+            <li><a href="https://www.walmart.com/cp/baby-registry/1229485">Walmart</a></li>
+            <li><a href="https://www.target.com/gift-registry/create-baby-registry">Target</a></li>
+        </ul>
+
+    </ul>
+
 
 </body>
 
