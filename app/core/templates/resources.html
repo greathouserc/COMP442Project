@@ -5,28 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
     <title>Resources</title>
 </head>
 
 <body>
-    <header>
-
-        <body>
-            <nav id="nav-bar">
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a class="active" href="resources">Resources</a></li>
-                    <li><a href="#help">Get Help</a></li>
-                    <li><a href="#connect">Connect</a></li>
-                    {% if user.is_authenticated == true %}
-                    <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
-                    {% else %}
-                    <li style="float:right"><a href="{{ url_for('auth.get_login') }}">Login</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </body>
-    </header>
+  <header>
+    <nav id="nav-bar">
+      <ul>
+    <li><a href="{{ url_for('core.index') }}">Home</a></li>
+        <li><a class="active" href="{{ url_for('core.resources') }}">Resources</a></li>
+        <li><a href="#help">Get Help</a></li>
+        <li><a href="#connect">Connect</a></li>
+        {% if user.is_authenticated == true %}
+        <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
+        {% else %}
+        <li style="float:right"><a href="{{ url_for('auth.get_login') }}">Login</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
 
     <h1>Resources</h1>
 
