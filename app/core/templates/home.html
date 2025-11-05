@@ -17,16 +17,16 @@
       <!-- Nav Bar Section -->
       <nav id="nav-bar">
         <ul>
-          <li><a class="active" href="{{ url_for('core.index') }}">Home</a></li>
-          <li><a href="{{ url_for('core.resources') }}">Resources</a></li>
+          <li><a class="active" href="/home">Home</a></li>
+          <li><a href="/resources">Resources</a></li>
           <li><a href="#help">Get Help</a></li>
           <li><a href="#connect">Connect</a></li>
+
           {% if user.is_authenticated == true %}
           <li style="float:right"><a href="{{ url_for('auth.route_logout') }}">Logout</a></li>
           {% else %}
           <li style="float:right"><a href="{{ url_for('auth.get_login') }}">Login</a></li>
           {% endif %}
-
 
         </ul>
       </nav>
@@ -110,8 +110,6 @@
           {% endwith %}
         </div>
       </section>
-
-
 
     </body>
   </header>
