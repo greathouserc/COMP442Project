@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/resources.css') }}">
     <title>Resources</title>
 </head>
@@ -26,19 +25,23 @@
         </ul>
     </nav>
 
-    <main class="containter">
-        <h1>Resources</h1>
 
-        <h2>General Advice</h2>
+    <h1>Resources</h1>
 
+    <h2>General Advice</h2>
+
+    <div class="iframe-container">
         <iframe width="280" height="158" src="https://www.youtube.com/embed/Es5tyoL8AsU?si=X13t76E6rwasyW8a"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
         </iframe>
+    </div>
 
-        <h2>Medical Advice and Health</h2>
 
+
+    <h2>Medical Advice and Health</h2>
+    <div class="iframe-container">
         <iframe width="280" height="158" src="https://www.youtube.com/embed/hpgjwK_oQe0?si=UbAH9IZ6FBQXVWWn"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -62,10 +65,12 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
         </iframe>
+    </div>
 
 
-        <h2>Spiritual/Mental Wellbeing</h2>
+    <h2>Spiritual/Mental Wellbeing</h2>
 
+    <div class="iframe-container">
         <iframe width="280" height="158" src="https://www.youtube.com/embed/GvgfoAfE30E?si=tEC57WrjjvpV1P1L"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -83,24 +88,28 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
         </iframe>
+    </div>
 
-        <h2>Need Help Getting Baby Essentials? Here are Some Organizations that Provide Free Resources</h2>
+
+
+    <h2>Need Help Getting Baby Essentials? Here are Some Organizations that Provide Free Resources</h2>
+    <h3>Select an option to receive support or additional information</h3>
+
+    <ul>
+        <li><a href="https://www.fns.usda.gov/wic">A suborganization of the USDA, WIC provides support to
+                expecting mothers in need</a></li>
+        <li><a href="https://aeroflowbreastpumps.com/qualify-through-insurance">Aeroflow provides free resources to
+                pregnant moms with qualifying insurance</a></li>
+
+        <li>Both Walmart and Target offer free supplies when you start a baby registry with them, no purchase
+            required
+        </li>
         <ul>
-            <li><a href="https://www.fns.usda.gov/wic">A suborganization of the USDA, WIC provides support to
-                    expecting mothers in need</a></li>
-            <li><a href="https://aeroflowbreastpumps.com/qualify-through-insurance">Aeroflow provides free resources to
-                    pregnant moms with qualifying insurance</a></li>
-
-            <li>Both Walmart and Target offer free supplies when you start a baby registry with them, no purchase required
-            </li>
-            <ul>
-                <li><a href="https://www.walmart.com/cp/baby-registry/1229485">Walmart</a></li>
-                <li><a href="https://www.target.com/gift-registry/create-baby-registry">Target</a></li>
-            </ul>
-
+            <li><a href="https://www.walmart.com/cp/baby-registry/1229485">Walmart</a></li>
+            <li><a href="https://www.target.com/gift-registry/create-baby-registry">Target</a></li>
         </ul>
+    </ul>
 
-        </main>
-    </body>
+</body>
 
 </html>
