@@ -11,6 +11,11 @@ h2 {
     padding-left: 10px
 }
 
+h3 {
+    color: green;
+    padding-left: 20px;
+}
+
 .iframe-container {
     padding-left: 20px
 }
@@ -21,11 +26,14 @@ h2 {
 }
 
 a {
-    color: black;
+    color: yellowgreen;
     text-decoration: none;
 }
 
-h3 {
-    color: green;
-    padding-left: 20px;
+body {
+    background-color: grey;
+}
+
+ul li {
+    color: yellowgreen
 }
