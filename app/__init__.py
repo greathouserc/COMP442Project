@@ -35,7 +35,7 @@ def create_app(config=Config):
     login_manager.login_view = 'auth.get_login' # type: ignore
     login_manager.session_protection = 'strong'
     @login_manager.user_loader
-    def load_user(uid: int) -> User|None:
-        return User.query.get(int(uid))
+    def load_user(uid: str) -> User|None:
+        return User.query.get(uid)
     # return the manufactured Flask application
     return flask_app
