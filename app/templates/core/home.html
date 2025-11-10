@@ -1,121 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/homepage.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/navbar.css') }}"
-    />
-    <title>Home</title>
-  </head>
 
-  <body class="homepage">
-    <!-- Header & Navigation -->
-    <header>
-      <div class="navbar-container">
-        <nav id="nav-bar">
-          <ul>
-            <li><a class="active" href="/home">Home</a></li>
-            <li><a href="/resources">Resources</a></li>
-            <li><a href="#help">Get Help</a></li>
-            <li><a href="#connect">Connect</a></li>
-            {% if user.is_authenticated == true %}
-            <li style="float: right">
-              <a href="{{ url_for('auth.route_logout') }}">Logout</a>
-            </li>
-            {% else %}
-            <li style="float: right">
-              <a href="{{ url_for('auth.get_login') }}">Login</a>
-            </li>
-            {% endif %}
-          </ul>
-        </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}" />
+  <title>Home</title>
+</head>
+
+<body class="homepage">
+  <!-- Header & Navigation -->
+  <header>
+    <div class="navbar-container">
+      <nav id="nav-bar">
+        <ul>
+          <li><a class="active" href="/home">Home</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="#help">Get Help</a></li>
+          <li><a href="#connect">Connect</a></li>
+          {% if user.is_authenticated == true %}
+          <li style="float: right">
+            <a href="{{ url_for('auth.route_logout') }}">Logout</a>
+          </li>
+          {% else %}
+          <li style="float: right">
+            <a href="{{ url_for('auth.get_login') }}">Login</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Landing Page Section -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Welcome to Flourish</h1>
+      <p>Enabling Women to Thrive Throughout their Pregnancy</p>
+
+      {% if not user.is_authenticated %}
+      <div class="cta-buttons">
+        <a id="login-btn" href="{{ url_for('auth.get_login') }}" class="btn btn-primary">Login</a>
+        <a id="signup-btn" href="{{ url_for('auth.get_registration') }}" class="btn btn-secondary">Sign Up</a>
       </div>
-    </header>
+      {% endif %}
+    </div>
+  </section>
 
-    <!-- Landing Page Section -->
-    <section id="hero">
-      <div class="hero-content">
-        <h1>Welcome to Her Haven</h1>
-        <p>Supporting every step of your journey</p>
+  <!-- Contact Form Section  -->
+  <section id="contact">
+    <div class="container">
+      <h2>Get in Touch</h2>
+      <p>Have questions? We'd love to hear from you!</p>
 
-        {% if not user.is_authenticated %}
-        <div class="cta-buttons">
-          <a
-            id="login-btn"
-            href="{{ url_for('auth.get_login') }}"
-            class="btn btn-primary"
-            >Login</a
-          >
-          <a
-            id="signup-btn"
-            href="{{ url_for('auth.get_registration') }}"
-            class="btn btn-secondary"
-            >Sign Up</a
-          >
+      <form class="contact-form" method="POST" action="{{ url_for('core.contact') }}">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+          {{ form.name.label }} {{ form.name(class="form-control") }} {% if
+          form.name.errors %} {% for error in form.name.errors %}
+          <span class="error">{{ error }}</span>
+          {% endfor %} {% endif %}
         </div>
-        {% endif %}
-      </div>
-    </section>
 
-    <!-- Contact Form Section  -->
-    <section id="contact">
-      <div class="container">
-        <h2>Get in Touch</h2>
-        <p>Have questions? We'd love to hear from you!</p>
+        <div class="form-group">
+          {{ form.email.label }} {{ form.email(class="form-control") }} {% if
+          form.email.errors %} {% for error in form.email.errors %}
+          <span class="error">{{ error }}</span>
+          {% endfor %} {% endif %}
+        </div>
 
-        <form
-          class="contact-form"
-          method="POST"
-          action="{{ url_for('core.contact') }}"
-        >
-          {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ form.subject.label }} {{ form.subject(class="form-control") }} {%
+          if form.subject.errors %} {% for error in form.subject.errors %}
+          <span class="error">{{ error }}</span>
+          {% endfor %} {% endif %}
+        </div>
 
-          <div class="form-group">
-            {{ form.name.label }} {{ form.name(class="form-control") }} {% if
-            form.name.errors %} {% for error in form.name.errors %}
-            <span class="error">{{ error }}</span>
-            {% endfor %} {% endif %}
-          </div>
+        <div class="form-group">
+          {{ form.message.label }} {{ form.message(class="form-control",
+          rows="5") }} {% if form.message.errors %} {% for error in
+          form.message.errors %}
+          <span class="error">{{ error }}</span>
+          {% endfor %} {% endif %}
+        </div>
 
-          <div class="form-group">
-            {{ form.email.label }} {{ form.email(class="form-control") }} {% if
-            form.email.errors %} {% for error in form.email.errors %}
-            <span class="error">{{ error }}</span>
-            {% endfor %} {% endif %}
-          </div>
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
 
-          <div class="form-group">
-            {{ form.subject.label }} {{ form.subject(class="form-control") }} {%
-            if form.subject.errors %} {% for error in form.subject.errors %}
-            <span class="error">{{ error }}</span>
-            {% endfor %} {% endif %}
-          </div>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+  </section>
 
-          <div class="form-group">
-            {{ form.message.label }} {{ form.message(class="form-control",
-            rows="5") }} {% if form.message.errors %} {% for error in
-            form.message.errors %}
-            <span class="error">{{ error }}</span>
-            {% endfor %} {% endif %}
-          </div>
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+</body>
 
-          {{ form.submit(class="btn btn-primary") }}
-        </form>
-
-        {% with messages = get_flashed_messages(with_categories=true) %} {% if
-        messages %} {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %} {% endif %} {% endwith %}
-      </div>
-    </section>
-
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
-  </body>
 </html>
