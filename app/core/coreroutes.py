@@ -6,11 +6,11 @@ from app.core.contactforms import ContactForm
 @bp.route('/home/')
 def index():
     form = ContactForm()
-    return render_template('home.html', user=current_user, form=form)
+    return render_template('core/home.html', user=current_user, form=form)
 
 @bp.route('/resources/')
 def resources():
-    return render_template('resources.html', user=current_user)
+    return render_template('core/resources.html', user=current_user)
 
 @bp.route('/contact', methods=['GET', 'POST'])
 def contact():

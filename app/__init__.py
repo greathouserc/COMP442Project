@@ -9,7 +9,7 @@ ma = Marshmallow()
 
 def create_app(config=Config):
     # create the flask app and set all its config options based on a config object
-    flask_app = Flask(__name__)
+    flask_app = Flask(__name__, static_folder='static')
     flask_app.config.from_object(config)
     # connect the core endpoints without a prefix
     from app.core import bp as core_bp
@@ -20,7 +20,7 @@ def create_app(config=Config):
     # register the database models
     db.init_app(flask_app)
     # import utility functions for database setup
-    from app.core.models import init_app_db
+    from app.core.coremodels import init_app_db
     # refresh the database creating tables and default data
     with flask_app.app_context(): init_app_db()
     # register the marshmallow model JSON schemas
@@ -29,7 +29,7 @@ def create_app(config=Config):
     from app.api import bp as api_bp
     flask_app.register_blueprint(api_bp, url_prefix='/api')
     # set up Flask-Login for the whole application
-    from app.auth.models import User
+    from app.auth.authmodels import User
     login_manager = LoginManager()
     login_manager.init_app(flask_app)
     login_manager.login_view = 'auth.get_login' # type: ignore

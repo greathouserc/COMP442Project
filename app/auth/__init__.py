@@ -7,4 +7,4 @@ templates_dir: str = os.path.join(bp_dir, 'templates')
 
 bp = Blueprint('auth', __name__, template_folder=templates_dir)
 
-from app.auth import routes
+from app.auth import authroutes

@@ -5,18 +5,18 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from app import db
 from app.auth import bp
-from app.auth.models import User
-from app.auth.forms import LoginForm, RegisterForm
+from app.auth.authmodels import User
+from app.auth.authforms import LoginForm, RegisterForm
 
 @bp.get('/register/')
 def get_registration():
     form: RegisterForm = RegisterForm()
-    return render_template('register.html', form=form)
+    return render_template('auth/register.html', form=form)
 
 @bp.get('/login/')
 def get_login():
     form: LoginForm = LoginForm()
-    return render_template('login.html', form=form)
+    return render_template('auth/login.html', form=form)
 
 @bp.post('/register/')
 def post_registration():

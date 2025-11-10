@@ -1,19 +1,6 @@
-Git repo for COMP422 Project
+To run the Flask server, use `server.py`.
 
-python installs needed to run server.py
+Install all required Python packages with:
 
-pip install:
+pip install -r requirements.txt
 
-dotenv
-flask
-flask_login
-flask_sqlalchemy
-flask_marshmallow
-cryptography
-passlib
-marshmallow_sqlalchemy
-flask_wtf
-argon2_cffi
-uvicorn
-email_validator
-sqlalchemy_utils
