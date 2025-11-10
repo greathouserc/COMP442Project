@@ -25,8 +25,7 @@ def post_registration():
         email = form.email.data
         password = form.password.data
         if User.query.get(email) is not None:
-            flash("A user with this email address already exists.")
-            return redirect(url_for('auth.get_registration'))
+            return render_template('auth/register.html', form=form, user_exists=True)
         else:
             new_user = User(email=email, password=password)
 
