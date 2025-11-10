@@ -24,10 +24,15 @@ def post_registration():
     if form.validate():
         email = form.email.data
         password = form.password.data
-        new_user = User(email=email, password=password)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('auth.get_login'))
+        if User.query.get(email) is not None:
+            flash("A user with this email address already exists.")
+            return redirect(url_for('auth.get_registration'))
+        else:
+            new_user = User(email=email, password=password)
+
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('auth.get_login'))
     else:
         for field, error_msg in form.errors.items():
             flash(f'{field}: {error_msg}')

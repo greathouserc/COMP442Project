@@ -1,4 +1,5 @@
 import base64
+from typing import override
 from flask import current_app
 from flask_login import UserMixin
 from sqlalchemy.orm import Mapped, mapped_column
@@ -8,8 +9,8 @@ from app import db, ma
 
 class User(UserMixin, db.Model):
     __tablename__ = "Users"
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    email: Mapped[str] = mapped_column(nullable=False)
+    # id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(primary_key = True, nullable=False)
     password_hash: Mapped[bytes] = mapped_column(nullable=False)
 
     @property
@@ -42,6 +43,11 @@ class User(UserMixin, db.Model):
         pwd_hash: str = pwd_hash_bytes.decode('utf-8')
         # have passlib check if the entered password matches this hash
         return argon2.verify(given_password, pwd_hash)
+
+    @override
+    def get_id(self) -> str:
+        """Return the email as the unique identifier for Flask-Login"""
+        return self.email
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
