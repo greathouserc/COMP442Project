@@ -7,12 +7,9 @@ from sqlalchemy_utils import database_exists
 from marshmallow_sqlalchemy.fields import Nested
 
 from app import db, ma
-from app.auth.models import User, UserSchema
+from app.auth.authmodels import User, UserSchema
 import os
 from config import default_db_path
-################################################################################
-# Core Database Model Classes
-################################################################################
 
 def init_app_db():
     """Initialize database tables and add any default entries"""

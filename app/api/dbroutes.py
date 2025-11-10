@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 
 from app import db
 from app.api import bp
-from app.auth.models import UserSchema
+from app.auth.authmodels import UserSchema
 
 ################################################################################
 # REST API

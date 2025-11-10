@@ -1,58 +1,52 @@
-body {
-  margin: 0;
-  padding: 0;
+/* Navbar container wrapper to prevent conflicts */
+.navbar-container #nav-bar {
+  background-color: #333333;
+  overflow: hidden;
+  font-family: "Fira Sans", sans-serif;
 }
 
-h2, p {
-  margin: 10px;
-}
-
-#nav-bar ul {
+.navbar-container #nav-bar ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background-color: #333333;
 }
 
-#nav-bar ul li {
+.navbar-container #nav-bar ul li {
   float: left;
 }
 
-#nav-bar ul li a {
+.navbar-container #nav-bar ul li a {
   display: block;
   color: white;
   text-align: center;
   padding: 20px 16px;
   text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-#nav-bar ul li a:hover:not(.active) {
+.navbar-container #nav-bar ul li a:hover:not(.active) {
   background-color: #111111;
 }
 
-#nav-bar ul li a.active {
-  background-color: #04AA6D;
+.navbar-container #nav-bar ul li a.active {
+  background-color: #4CAF50;
+  color: #fff !important;
+  border-color: #4CAF50 !important;
 }
 
-
-/* Login Page Nav Bar */
-#login-page #nav-bar {
-  background-color: #555555; 
+/* Login Page Navbar Overrides */
+#login-page .navbar-container #nav-bar {
+  background-color: #555555;
 }
 
-#login-page #nav-bar ul li a {
-  color: white; 
+#login-page .navbar-container #nav-bar ul li a:hover:not(.active) {
+  background-color: #333333;
 }
 
-#login-page #nav-bar ul li a:hover:not(.active) {
-  background-color: #333333; 
-}
-
-#login-page #nav-bar p {
+#login-page .navbar-container #nav-bar p {
   color: white;
   font-size: 20px;
   text-align: center;
-  padding: 20px 16px; 
+  padding: 20px 16px;
   margin: 0;
 }

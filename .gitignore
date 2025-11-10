@@ -1,15 +1,14 @@
-# Ignore __pycache__ directories anywhere in the repo
+# Python
 __pycache__/
 **/__pycache__/
-# Ignore common compiled Python files
 *.py[cod]
 *.pyc
 *.pyo
 
-# Distribution / packaging
+
+# Packaging / Distribution
 .Python
 build/
-develop-eggs/
 dist/
 downloads/
 eggs/
@@ -26,23 +25,28 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-
 # Environments
 .env
 .envrc
-.venv
-env/
+.venv/
 venv/
+env/
 ENV/
 env.bak/
 venv.bak/
 
-# Flask stuff:
+# Framework-specific
+# Django
+local_settings.py
+ db.sqlite3
+ db.sqlite3-journal
+# Flask
 user_table.db
+
+# Editor & OS
+.vscode/
+.DS_Store
+
+# Logs & Databases
+*.log
+*.db

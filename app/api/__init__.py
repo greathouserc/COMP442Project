@@ -8,4 +8,4 @@ templates_dir: str = os.path.join(bp_dir, 'templates')
 bp = Blueprint('api', __name__, 
                template_folder=templates_dir)
 
-from app.api import routes
+from app.api import dbroutes

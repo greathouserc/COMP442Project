@@ -1,0 +1,15 @@
+# Python dependencies for COMP442Project
+Flask
+flask_login
+flask_sqlalchemy
+flask_marshmallow
+flask_wtf
+python-dotenv
+cryptography
+passlib
+marshmallow_sqlalchemy
+argon2_cffi
+uvicorn
+email_validator
+sqlalchemy_utils
+
