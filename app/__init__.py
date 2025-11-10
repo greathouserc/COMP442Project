@@ -3,9 +3,11 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_mail import Mail
 
 db = SQLAlchemy()
 ma = Marshmallow()
+mail = Mail()
 
 def create_app(config=Config):
     # create the flask app and set all its config options based on a config object
@@ -25,6 +27,8 @@ def create_app(config=Config):
     with flask_app.app_context(): init_app_db()
     # register the marshmallow model JSON schemas
     ma.init_app(flask_app)
+    # initialize Flask-Mail
+    mail.init_app(flask_app)
     # connect the api endpoints under the prefix /api
     from app.api import bp as api_bp
     flask_app.register_blueprint(api_bp, url_prefix='/api')
