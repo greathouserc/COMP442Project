@@ -4,6 +4,7 @@ flask_login
 flask_sqlalchemy
 flask_marshmallow
 flask_wtf
+flask_mail
 python-dotenv
 cryptography
 passlib
