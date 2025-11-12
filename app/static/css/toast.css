@@ -115,3 +115,24 @@
     width: 100%;
   }
 }
+
+@keyframes toastProgress {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+}
+}
+
+.toast-progress {
+    position: absolute;
+    display: block;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background: #b7b7b7;
+    animation: toastProgress 3s
+        ease-in-out forwards;
+}
