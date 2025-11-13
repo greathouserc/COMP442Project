@@ -42,13 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //loadMap();
     var isRetina = L.Browser.retina;
-    const retinaUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey={apiKey}"
-    const baseUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey={apiKey}";
+    const retinaUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey=${myAPIKey}`
+    const baseUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${myAPIKey}`;
 
     //map tile layer
     L.tileLayer(isRetina ? retinaUrl : baseUrl, {
         attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" rel="nofollow" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" rel="nofollow" target="_blank">© OpenStreetMap</a> contributors',
-        apiKey: myAPIKey,
         maxZoom: 20,
         id: 'osm-bright',
     }).addTo(my_map);
@@ -62,13 +61,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // // // let healthOn = false;
 
+    let cats = "";
+
     if (healthBtn) {
         healthBtn.addEventListener("click", (event: MouseEvent) => {
             console.log("Healthcare button clicked");
             healthBtn.style.backgroundColor = "#4CAF50";
             socialBtn.style.backgroundColor = "#111111";
             clearBtn.style.backgroundColor = "#111111";
-            loadPlaces("https://api.geoapify.com/v2/places?categories=healthcare.clinic_or_praxis&filter=rect:-78.09921757581298,38.73660286449031,-82.07762874146101,43.58987145915573&limit=100&apiKey=09d5b6e52d8946efab4b009650b3b211");
+            cats = "healthcare.clinic_or_praxis";
+            loadPlaces(cats);
         });
     }
     
@@ -78,7 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
             healthBtn.style.backgroundColor = "#111111";
             socialBtn.style.backgroundColor = "#4CAF50";
             clearBtn.style.backgroundColor = "#111111";
-            loadPlaces("https://api.geoapify.com/v2/places?categories=service.social_facility&filter=rect:-78.09921757581298,38.73660286449031,-82.07762874146101,43.58987145915573&limit=100&apiKey=09d5b6e52d8946efab4b009650b3b211");
+            cats = "service.social_facility";
+            loadPlaces(cats);
         });
     }
 
@@ -116,15 +119,15 @@ document.addEventListener("DOMContentLoaded", () => {
     //     }).addTo(my_map);
     // }
     
-    async function loadPlaces(searchUrl: string){
+    async function loadPlaces(cats: string){
         //const bounds: LatLngBounds = my_map.getBounds(); 41.1558, -80.0815 -78.09921757581298,38.73660286449031,-82.07762874146101,43.58987145915573&limit
         const bounds = my_map.getBounds();
-        const rect = "${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}";
-        //let searchUrl = "https://api.geoapify.com/v2/places?categories=healthcare.clinic_or_praxis,service.social_facility&filter=rect:-78.09921757581298,38.73660286449031,-82.07762874146101,43.58987145915573&limit=100&apiKey=09d5b6e52d8946efab4b009650b3b211";
+        const rect = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`;
+        const searchUrl = `https://api.geoapify.com/v2/places?categories=${cats}&filter=rect:${rect}&limit=100&apiKey=09d5b6e52d8946efab4b009650b3b211`;
 
         const response = await fetch(searchUrl);
         if(!response.ok){
-            throw new Error("Goapify API error: ${response.statusText}");
+            throw new Error(`Goapify API error: ${response.statusText}`);
         }
         const data: GeoJSONData = await response.json();
 
@@ -132,10 +135,10 @@ document.addEventListener("DOMContentLoaded", () => {
         renderPlaces(data);
     }
 
-    function markericonUrl(iconName = "map-marker", color = "#37a961"){
+    function markericonUrl(iconName = "map-marker", color = "greenyellow"){
         const icon = encodeURIComponent(iconName);
         const tint = encodeURIComponent(color);
-        return "https://api.geoapify.com/v2/icon?type=material&color=%23ff5722&size=64&apiKey=09d5b6e52d8946efab4b009650b3b211";
+        return `https://api.geoapify.com/v2/icon?type=material&color=${tint}&size=64&apiKey=09d5b6e52d8946efab4b009650b3b211`;
     }
 
     function renderPlaces(geojson: GeoJSONData | null){
@@ -158,14 +161,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 iconUrl: markericonUrl(),
                 iconSize: [38, 55],
                 iconAnchor: [18, 50],
-                popupAnchor: [0, 50]
+                popupAnchor: [1, -10]
             });
 
             const name = properties?.name || properties?.address_line1 || "Unnamed place";
             const address = properties?.address_line2 || properties?.formal || "";
 
             L.marker([lat, lng], {icon: my_icon})
-                .bindPopup("<strong>${escapeHtml(name)}</strong><br>${escapeHtml(address)}")
+                .bindPopup(`<strong>${escapeHtml(name)}</strong><br>${escapeHtml(address)}`)
                 .addTo(resultsLayer);
         });
     }
