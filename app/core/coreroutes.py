@@ -19,6 +19,11 @@ def index():
 def resources():
     return render_template('core/resources.html', user=current_user)
 
+
+@bp.route('/help/')
+def get_help():
+    return render_template('core/help.html', user=current_user)
+
 def send_async_email(app, msg):
     """Send email in background thread"""
     with app.app_context():
