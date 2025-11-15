@@ -19,6 +19,10 @@ def index():
 def resources():
     return render_template('core/resources.html', user=current_user)
 
+@bp.route('/resource_list/')
+def resource_list():
+    return render_template('')
+
 
 @bp.route('/help/')
 def get_help():
