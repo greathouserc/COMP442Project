@@ -43,58 +43,38 @@ document.addEventListener("DOMContentLoaded", function () { return __awaiter(_th
 }); });
 function loadResources() {
     return __awaiter(this, void 0, void 0, function () {
-        var indexURL, indexResponse, index, resourceTable, _i, _a, stub, row;
+        var indexResponse, index, advice, health, spiritual, _i, _a, stub, baseURL, indexURL, iframe;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0:
-                    indexURL = "https://localhost:5000/resource_list/";
-                    return [4 /*yield*/, fetch(indexURL)];
+                case 0: return [4 /*yield*/, fetch("http://127.0.0.1:5000/resource_library")];
                 case 1:
                     indexResponse = _b.sent();
                     return [4 /*yield*/, validateJSON(indexResponse)];
                 case 2:
                     index = _b.sent();
-                    resourceTable = document.getElementById("resource-table");
-                    _i = 0, _a = index.results;
-                    _b.label = 3;
-                case 3:
-                    if (!(_i < _a.length)) return [3 /*break*/, 6];
-                    stub = _a[_i];
-                    row = resourceTable.insertRow();
-                    return [4 /*yield*/, fetchResource(stub, row)];
-                case 4:
-                    _b.sent();
-                    _b.label = 5;
-                case 5:
-                    _i++;
-                    return [3 /*break*/, 3];
-                case 6: return [2 /*return*/];
-            }
-        });
-    });
-}
-function fetchResource(stub, row) {
-    return __awaiter(this, void 0, void 0, function () {
-        var raceTable, baseURL, indexURL, response, details, vid, iframe;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    raceTable = document.getElementById("dnd-race-table");
-                    baseURL = "https://www.youtube.com/embed/";
-                    indexURL = "".concat(baseURL).concat(stub.url);
-                    return [4 /*yield*/, fetch("".concat(baseURL).concat(stub.url))];
-                case 1:
-                    response = _a.sent();
-                    return [4 /*yield*/, validateJSON(response)];
-                case 2:
-                    details = _a.sent();
-                    vid = row.insertCell();
-                    iframe = document.createElement('iframe');
-                    iframe.width = "280";
-                    iframe.height = "158";
-                    iframe.src = indexURL;
-                    iframe.title = "YouTube video player";
-                    vid.appendChild(iframe);
+                    advice = document.getElementById("general-advice");
+                    health = document.getElementById("medical-health");
+                    spiritual = document.getElementById("spiritual-health");
+                    for (_i = 0, _a = index.results; _i < _a.length; _i++) {
+                        stub = _a[_i];
+                        console.log(stub);
+                        baseURL = "https://www.youtube.com/embed/";
+                        indexURL = "".concat(baseURL).concat(stub.url);
+                        iframe = document.createElement('iframe');
+                        iframe.width = "280";
+                        iframe.height = "158";
+                        iframe.src = indexURL;
+                        iframe.title = "YouTube video player";
+                        if (stub.type === "G") {
+                            advice.appendChild(iframe);
+                        }
+                        else if (stub.type === "M") {
+                            health.appendChild(iframe);
+                        }
+                        else {
+                            spiritual.appendChild(iframe);
+                        }
+                    }
                     return [2 /*return*/];
             }
         });
