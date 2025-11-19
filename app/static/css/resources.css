@@ -41,3 +41,21 @@ body.resources-page {
 .resources-page ul li {
     color: yellowgreen;
 }
+
+.resources-page #general-advice{
+    width: 1000px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.resources-page #medical-health{
+    width: 1000px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.resources-page #spiritual-health{
+    width: 1000px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
