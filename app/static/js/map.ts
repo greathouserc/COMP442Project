@@ -25,7 +25,7 @@ interface GeoJSONData{
     type: "FatureCollection";
     features: GeoJSONFeature[];
 }
-    
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const element = document.getElementById('insert_map') as HTMLAnchorElement | null;
@@ -36,7 +36,26 @@ document.addEventListener("DOMContentLoaded", () => {
     //     zoom: 10
     // };
 
-    const my_map = L.map(element).setView([41.1558, -80.0815], 10);
+    //const coords: Promise<Array<number>> = getLocation();
+
+    let lat = 41.1558;
+    let lon = -80.0815;
+
+    // let lat: number;
+    // let lon: number;
+
+    const coords = getLocation();
+    coords.then(function(nums: Array<number>){
+        lat = nums.at(0);
+        lon = nums.at(1);
+    });
+
+
+    console.log(lat);
+    console.log(lon);
+
+
+    const my_map = L.map(element).setView([lat, lon], 10);
     //API key
     const myAPIKey = "09d5b6e52d8946efab4b009650b3b211";
 
@@ -57,6 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
     //clicking each button adds a category to the search and the submission of the form reloads the search
     const healthBtn = document.getElementById("health-btn") as HTMLAnchorElement | null;
     const socialBtn = document.getElementById("social-btn") as HTMLAnchorElement | null;
+    const childcareBtn = document.getElementById("childcare-btn") as HTMLAnchorElement | null;
+    const storeBtn = document.getElementById("store-btn") as HTMLAnchorElement | null;
+    const churchBtn = document.getElementById("church-btn") as HTMLAnchorElement | null;
+    const savedBtn = document.getElementById("saved-btn") as HTMLAnchorElement | null;
     const clearBtn = document.getElementById("clear-btn") as HTMLAnchorElement | null;
 
     // // // let healthOn = false;
@@ -66,34 +89,62 @@ document.addEventListener("DOMContentLoaded", () => {
     if (healthBtn) {
         healthBtn.addEventListener("click", (event: MouseEvent) => {
             console.log("Healthcare button clicked");
-            healthBtn.style.backgroundColor = "#4CAF50";
-            socialBtn.style.backgroundColor = "#111111";
-            clearBtn.style.backgroundColor = "#111111";
-            cats = "healthcare.clinic_or_praxis";
-            loadPlaces(cats);
+            resetButtonColors(healthBtn);
+            loadPlaces("healthcare.clinic_or_praxis");
         });
     }
     
     if (socialBtn) {
         socialBtn.addEventListener("click", (event: MouseEvent) => {
             console.log("Social Services button clicked");
-            healthBtn.style.backgroundColor = "#111111";
-            socialBtn.style.backgroundColor = "#4CAF50";
-            clearBtn.style.backgroundColor = "#111111";
-            cats = "service.social_facility";
-            loadPlaces(cats);
+            resetButtonColors(socialBtn);
+            loadPlaces("service.social_facility");
         });
     }
 
-    if (clearBtn) {
+    if (childcareBtn) {
+        childcareBtn.addEventListener("click", (event: MouseEvent) => {
+            console.log("Childcare button clicked");
+            resetButtonColors(childcareBtn);
+            loadPlaces("childcare");
+        });
+    }
+
+    if (storeBtn) {
+        storeBtn.addEventListener("click", (event: MouseEvent) => {
+            console.log("Baby Store button clicked");
+            resetButtonColors(storeBtn);
+            loadPlaces("commercial.baby_goods");
+        });
+    }
+
+    if (churchBtn) {
+        churchBtn.addEventListener("click", (event: MouseEvent) => {
+            console.log("Christian Church button clicked");
+            resetButtonColors(churchBtn);
+            loadPlaces("religion.place_of_worship.christianity");
+        });
+    }
+
+    if (savedBtn) {
+        savedBtn.addEventListener("click", (event: MouseEvent) => {
+            console.log("Saved Locations button clicked");
+            resetButtonColors(savedBtn);
+            //loadPlaces("religion.place_of_worship.christianity");
+        });
+    }
+
+     if (clearBtn) {
         clearBtn.addEventListener("click", (event: MouseEvent) => {
             console.log("Clear Map button clicked");
-            healthBtn.style.backgroundColor = "#111111";
-            socialBtn.style.backgroundColor = "#111111";
-            clearBtn.style.backgroundColor = "#4CAF50";
+            resetButtonColors(clearBtn);
             resultsLayer.clearLayers();
         });
     }
+
+    //healthcare.clinic_or_praxis.paediatrics
+    //commercial.health_and_beauty.medical_supply
+    //commercial.health_and_beauty.pharmacy
 
     //         if(healthOn){
     //             if(categories === ""){
@@ -182,6 +233,35 @@ document.addEventListener("DOMContentLoaded", () => {
             .replaceAll("'", "&#039;")
     }
 
+    function resetButtonColors(btn: HTMLAnchorElement){
+        healthBtn.style.backgroundColor = "#111111";
+        socialBtn.style.backgroundColor = "#111111";
+        childcareBtn.style.backgroundColor = "#111111";
+        storeBtn.style.backgroundColor = "#111111";
+        churchBtn.style.backgroundColor = "#111111";
+        clearBtn.style.backgroundColor = "#111111";
 
+        btn.style.backgroundColor = "#4CAF50";
+    }
 });
 
+async function getLocation(): Promise<Array<number>>{
+    let latitude: number;
+    let longitude: number;
+
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((position) => {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            console.log(latitude);
+            console.log(longitude);
+            return [latitude, longitude];
+        }, (error) => {
+            console.error(`Error in getting location: ${error}`);
+        });
+    }else{
+            console.error("This browser does not support geolocation.")
+    }
+
+    return [latitude, longitude];
+}

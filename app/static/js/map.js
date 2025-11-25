@@ -1,7 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     const element = document.getElementById('insert_map');
     element.style = 'height:300px;';
-    const my_map = L.map(element).setView([41.1558, -80.0815], 10);
+    let lat = 41.1558;
+    let lon = -80.0815;
+    const coords = getLocation();
+    coords.then(function (nums) {
+        lat = nums.at(0);
+        lon = nums.at(1);
+    });
+    console.log(lat);
+    console.log(lon);
+    const my_map = L.map(element).setView([lat, lon], 10);
     const myAPIKey = "09d5b6e52d8946efab4b009650b3b211";
     var isRetina = L.Browser.retina;
     const retinaUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey=${myAPIKey}`;
@@ -14,34 +23,57 @@ document.addEventListener("DOMContentLoaded", () => {
     let resultsLayer = L.layerGroup();
     const healthBtn = document.getElementById("health-btn");
     const socialBtn = document.getElementById("social-btn");
+    const childcareBtn = document.getElementById("childcare-btn");
+    const storeBtn = document.getElementById("store-btn");
+    const churchBtn = document.getElementById("church-btn");
+    const savedBtn = document.getElementById("saved-btn");
     const clearBtn = document.getElementById("clear-btn");
     let cats = "";
     if (healthBtn) {
         healthBtn.addEventListener("click", (event) => {
             console.log("Healthcare button clicked");
-            healthBtn.style.backgroundColor = "#4CAF50";
-            socialBtn.style.backgroundColor = "#111111";
-            clearBtn.style.backgroundColor = "#111111";
-            cats = "healthcare.clinic_or_praxis";
-            loadPlaces(cats);
+            resetButtonColors(healthBtn);
+            loadPlaces("healthcare.clinic_or_praxis");
         });
     }
     if (socialBtn) {
         socialBtn.addEventListener("click", (event) => {
             console.log("Social Services button clicked");
-            healthBtn.style.backgroundColor = "#111111";
-            socialBtn.style.backgroundColor = "#4CAF50";
-            clearBtn.style.backgroundColor = "#111111";
-            cats = "service.social_facility";
-            loadPlaces(cats);
+            resetButtonColors(socialBtn);
+            loadPlaces("service.social_facility");
+        });
+    }
+    if (childcareBtn) {
+        childcareBtn.addEventListener("click", (event) => {
+            console.log("Childcare button clicked");
+            resetButtonColors(childcareBtn);
+            loadPlaces("childcare");
+        });
+    }
+    if (storeBtn) {
+        storeBtn.addEventListener("click", (event) => {
+            console.log("Baby Store button clicked");
+            resetButtonColors(storeBtn);
+            loadPlaces("commercial.baby_goods");
+        });
+    }
+    if (churchBtn) {
+        churchBtn.addEventListener("click", (event) => {
+            console.log("Christian Church button clicked");
+            resetButtonColors(churchBtn);
+            loadPlaces("religion.place_of_worship.christianity");
+        });
+    }
+    if (savedBtn) {
+        savedBtn.addEventListener("click", (event) => {
+            console.log("Saved Locations button clicked");
+            resetButtonColors(savedBtn);
         });
     }
     if (clearBtn) {
         clearBtn.addEventListener("click", (event) => {
             console.log("Clear Map button clicked");
-            healthBtn.style.backgroundColor = "#111111";
-            socialBtn.style.backgroundColor = "#111111";
-            clearBtn.style.backgroundColor = "#4CAF50";
+            resetButtonColors(clearBtn);
             resultsLayer.clearLayers();
         });
     }
@@ -98,4 +130,32 @@ document.addEventListener("DOMContentLoaded", () => {
             .replaceAll('"', "&quot;")
             .replaceAll("'", "&#039;");
     }
+    function resetButtonColors(btn) {
+        healthBtn.style.backgroundColor = "#111111";
+        socialBtn.style.backgroundColor = "#111111";
+        childcareBtn.style.backgroundColor = "#111111";
+        storeBtn.style.backgroundColor = "#111111";
+        churchBtn.style.backgroundColor = "#111111";
+        clearBtn.style.backgroundColor = "#111111";
+        btn.style.backgroundColor = "#4CAF50";
+    }
 });
+async function getLocation() {
+    let latitude;
+    let longitude;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            console.log(latitude);
+            console.log(longitude);
+            return [latitude, longitude];
+        }, (error) => {
+            console.error(`Error in getting location: ${error}`);
+        });
+    }
+    else {
+        console.error("This browser does not support geolocation.");
+    }
+    return [latitude, longitude];
+}
