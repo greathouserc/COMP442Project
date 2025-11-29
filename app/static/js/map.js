@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         id: 'osm-bright',
     }).addTo(my_map);
     let resultsLayer = L.layerGroup();
+    let chosenFeature;
     const healthBtn = document.getElementById("health-btn");
     const socialBtn = document.getElementById("social-btn");
     const childcareBtn = document.getElementById("childcare-btn");
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const churchBtn = document.getElementById("church-btn");
     const savedBtn = document.getElementById("saved-btn");
     const clearBtn = document.getElementById("clear-btn");
+    const saveLocBtn = document.getElementById("save-location-btn");
     let cats = "";
     if (healthBtn) {
         healthBtn.addEventListener("click", (event) => {
@@ -68,6 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
         savedBtn.addEventListener("click", (event) => {
             console.log("Saved Locations button clicked");
             resetButtonColors(savedBtn);
+            const userEmail = getUserEmail();
+            userEmail.then(getSavedLocations).then(renderPlaces);
         });
     }
     if (clearBtn) {
@@ -75,6 +79,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Clear Map button clicked");
             resetButtonColors(clearBtn);
             resultsLayer.clearLayers();
+        });
+    }
+    if (saveLocBtn) {
+        saveLocBtn.addEventListener("click", (event) => {
+            console.log("Save Location button clicked");
         });
     }
     async function loadPlaces(cats) {
@@ -119,7 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const address = properties?.address_line2 || properties?.formal || "";
             L.marker([lat, lng], { icon: my_icon })
                 .bindPopup(`<strong>${escapeHtml(name)}</strong><br>${escapeHtml(address)}`)
-                .addTo(resultsLayer);
+                .addTo(resultsLayer)
+                .addEventListener("click", () => {
+                chosenFeature = f;
+                console.log(f.properties.name);
+            });
         });
     }
     function escapeHtml(s = "") {
@@ -131,31 +144,72 @@ document.addEventListener("DOMContentLoaded", () => {
             .replaceAll("'", "&#039;");
     }
     function resetButtonColors(btn) {
-        healthBtn.style.backgroundColor = "#111111";
-        socialBtn.style.backgroundColor = "#111111";
-        childcareBtn.style.backgroundColor = "#111111";
-        storeBtn.style.backgroundColor = "#111111";
-        churchBtn.style.backgroundColor = "#111111";
-        clearBtn.style.backgroundColor = "#111111";
+        healthBtn.style.backgroundColor = "#333333";
+        socialBtn.style.backgroundColor = "#333333";
+        childcareBtn.style.backgroundColor = "#333333";
+        storeBtn.style.backgroundColor = "#333333";
+        churchBtn.style.backgroundColor = "#333333";
+        savedBtn.style.backgroundColor = "#333333";
+        clearBtn.style.backgroundColor = "#333333";
         btn.style.backgroundColor = "#4CAF50";
     }
+    async function getLocation() {
+        let latitude;
+        let longitude;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+                console.log(latitude);
+                console.log(longitude);
+                return [latitude, longitude];
+            }, (error) => {
+                console.error(`Error in getting location: ${error}`);
+            });
+        }
+        else {
+            console.error("This browser does not support geolocation.");
+        }
+        return [latitude, longitude];
+    }
 });
-async function getLocation() {
-    let latitude;
-    let longitude;
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            latitude = position.coords.latitude;
-            longitude = position.coords.longitude;
-            console.log(latitude);
-            console.log(longitude);
-            return [latitude, longitude];
-        }, (error) => {
-            console.error(`Error in getting location: ${error}`);
-        });
+async function getUserEmail() {
+    const response = await fetch('/api/user-info/');
+    if (!response.ok) {
+        throw new Error(`DB Error: ${response.statusText}`);
     }
-    else {
-        console.error("This browser does not support geolocation.");
+    const userData = await response.json();
+    return userData.email;
+}
+async function getSavedLocations(userEmail) {
+    const response = await fetch(`/api/get-locations/${userEmail}/`);
+    if (!response.ok) {
+        throw new Error(`DB Error: ${response.statusText}`);
     }
-    return [latitude, longitude];
+    let data = await response.json();
+    let featureArray = [data.count];
+    let index = 0;
+    for (const result of data.results) {
+        const feature = {
+            type: "Feature",
+            properties: {
+                name: result.name,
+                formal: result.formal,
+                address_line1: result.address_line1,
+                address_line2: result.address_line2
+            },
+            geometry: {
+                type: "Point",
+                coordinates: [result.longitude, result.latitude]
+            }
+        };
+        featureArray[index] = feature;
+        index++;
+    }
+    const locationData = {
+        type: "FeatureCollection",
+        features: featureArray
+    };
+    console.log(locationData);
+    return locationData;
 }

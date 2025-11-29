@@ -3,14 +3,15 @@
 //     LatLngBounds, LayerGroup, LatLngExpression, geoJson, Browser} from 'leaflet';
 //import 'leaflet/dist/leaflet.css';
 
+
 declare const L: any;
 
-//makes PacesJson type and assign it to geoJson
+
 interface GeoJSONFeature{
     type: "Feature";
     properties: {
         name?: string;
-        formatted?: string;
+        formal?: string;
         address_line1?: string;
         address_line2?: string;
         [key: string]: any;
@@ -22,7 +23,7 @@ interface GeoJSONFeature{
 }
 
 interface GeoJSONData{
-    type: "FatureCollection";
+    type: "FeatureCollection";
     features: GeoJSONFeature[];
 }
 
@@ -36,13 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
     //     zoom: 10
     // };
 
-    //const coords: Promise<Array<number>> = getLocation();
 
     let lat = 41.1558;
     let lon = -80.0815;
-
-    // let lat: number;
-    // let lon: number;
 
     const coords = getLocation();
     coords.then(function(nums: Array<number>){
@@ -72,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }).addTo(my_map);
 
     let resultsLayer = L.layerGroup();
+    let chosenFeature: GeoJSONFeature;
 
     //clicking each button adds a category to the search and the submission of the form reloads the search
     const healthBtn = document.getElementById("health-btn") as HTMLAnchorElement | null;
@@ -81,6 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const churchBtn = document.getElementById("church-btn") as HTMLAnchorElement | null;
     const savedBtn = document.getElementById("saved-btn") as HTMLAnchorElement | null;
     const clearBtn = document.getElementById("clear-btn") as HTMLAnchorElement | null;
+
+    const saveLocBtn = document.getElementById("save-location-btn") as HTMLAnchorElement | null;
 
     // // // let healthOn = false;
 
@@ -130,17 +130,30 @@ document.addEventListener("DOMContentLoaded", () => {
         savedBtn.addEventListener("click", (event: MouseEvent) => {
             console.log("Saved Locations button clicked");
             resetButtonColors(savedBtn);
-            //loadPlaces("religion.place_of_worship.christianity");
+            
+            const userEmail = getUserEmail();
+            userEmail.then(getSavedLocations).then(renderPlaces);
         });
     }
 
-     if (clearBtn) {
+    if (clearBtn) {
         clearBtn.addEventListener("click", (event: MouseEvent) => {
             console.log("Clear Map button clicked");
             resetButtonColors(clearBtn);
             resultsLayer.clearLayers();
         });
     }
+
+    if (saveLocBtn) {
+        saveLocBtn.addEventListener("click", (event: MouseEvent) => {
+            console.log("Save Location button clicked");
+
+            
+
+        });
+    }
+
+
 
     //healthcare.clinic_or_praxis.paediatrics
     //commercial.health_and_beauty.medical_supply
@@ -220,7 +233,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             L.marker([lat, lng], {icon: my_icon})
                 .bindPopup(`<strong>${escapeHtml(name)}</strong><br>${escapeHtml(address)}`)
-                .addTo(resultsLayer);
+                .addTo(resultsLayer)
+                .addEventListener("click", ()=>{
+                    chosenFeature = f;
+                    console.log(f.properties.name);
+                });
         });
     }
 
@@ -234,34 +251,90 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function resetButtonColors(btn: HTMLAnchorElement){
-        healthBtn.style.backgroundColor = "#111111";
-        socialBtn.style.backgroundColor = "#111111";
-        childcareBtn.style.backgroundColor = "#111111";
-        storeBtn.style.backgroundColor = "#111111";
-        churchBtn.style.backgroundColor = "#111111";
-        clearBtn.style.backgroundColor = "#111111";
+        healthBtn.style.backgroundColor = "#333333";
+        socialBtn.style.backgroundColor = "#333333";
+        childcareBtn.style.backgroundColor = "#333333";
+        storeBtn.style.backgroundColor = "#333333";
+        churchBtn.style.backgroundColor = "#333333";
+        savedBtn.style.backgroundColor = "#333333";
+        clearBtn.style.backgroundColor = "#333333";
 
         btn.style.backgroundColor = "#4CAF50";
     }
+
+    async function getLocation(): Promise<Array<number>>{
+        let latitude: number;
+        let longitude: number;
+
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition((position) => {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+                console.log(latitude);
+                console.log(longitude);
+                return [latitude, longitude];
+            }, (error) => {
+                console.error(`Error in getting location: ${error}`);
+            });
+        }else{
+                console.error("This browser does not support geolocation.")
+        }
+
+        return [latitude, longitude];
+    }
 });
 
-async function getLocation(): Promise<Array<number>>{
-    let latitude: number;
-    let longitude: number;
 
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition((position) => {
-            latitude = position.coords.latitude;
-            longitude = position.coords.longitude;
-            console.log(latitude);
-            console.log(longitude);
-            return [latitude, longitude];
-        }, (error) => {
-            console.error(`Error in getting location: ${error}`);
-        });
-    }else{
-            console.error("This browser does not support geolocation.")
+interface UserData{
+    email: string;
+}
+
+async function getUserEmail(): Promise<string>{
+
+    const response = await fetch('/api/user-info/');
+    if(!response.ok){
+        throw new Error(`DB Error: ${response.statusText}`);
+    }
+    const userData: UserData = await response.json();
+
+    return userData.email;
+}
+
+async function getSavedLocations(userEmail: string): Promise<GeoJSONData>{
+    const response = await fetch(`/api/get-locations/${userEmail}/`);
+    if(!response.ok){
+        throw new Error(`DB Error: ${response.statusText}`);
+    }
+    let data = await response.json();
+
+    let featureArray: Array<GeoJSONFeature> = [data.count];
+    let index = 0;
+
+    for (const result of data.results){
+        const feature: GeoJSONFeature = {
+            type: "Feature",
+            properties: {
+                name: result.name,
+                formal: result.formal,
+                address_line1: result.address_line1,
+                address_line2: result.address_line2
+            },
+            geometry: {
+                type: "Point",
+                coordinates: [result.longitude, result.latitude]
+            }
+        };
+
+        featureArray[index] = feature;
+        index ++;
     }
 
-    return [latitude, longitude];
+    const locationData: GeoJSONData = {
+        type: "FeatureCollection",
+        features: featureArray
+    };
+
+    console.log(locationData);
+
+    return locationData;
 }
