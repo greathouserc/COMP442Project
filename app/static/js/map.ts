@@ -283,7 +283,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return [latitude, longitude];
     }
 });
+ 
 
+//comment
 
 interface UserData{
     email: string;
