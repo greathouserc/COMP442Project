@@ -14,7 +14,8 @@
 .help-page p {
     text-align: center;
     color: #666;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 .help-page .searchButtons {
@@ -27,25 +28,59 @@
     margin: 0;
     width: 150px;
     padding: 10px;
-    border: 1px solid white;
-    background-color: #111111;
-    color: #fff;
+    border: 1px solid #f9f9f9;
+    background-color: #333333;
+    color: white;
     text-align: center;
     text-decoration: none;
     font-size: 16px;
     cursor: pointer;
 }
 
+.help-page .user-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .help-page .btn-primary {
-    display: inline-block;
-    justify-content: end;
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
     padding: 1rem 2rem;
     margin: 0.5rem;
     border-radius: 30px;
     text-decoration: none;
     font-weight: bold;
     transition: all 0.3s ease;
-    background-color: #111111;
-    color: white;
-    border: 2px solid #111111;
 }
+
+.help-page .btn-secondary {
+    background-color: #f9f9f9;
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+    padding: 1rem 2rem;
+    margin: 0.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.homepage .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* .help-page .btn-primary {
+    text-align: center;
+    padding: 1rem 2rem;
+    margin: 0.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+} */
