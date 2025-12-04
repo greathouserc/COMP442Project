@@ -49,36 +49,33 @@
   <div id="spiritual-health"></div>
 
   <!-- Resource Links Section -->
-  <h2>Need Help Getting Baby Essentials?</h2>
-  <h3>Here are Some Organizations that Provide Free Resources</h3>
-  <h3>Select an option to receive support or additional information</h3>
+  <div class="resource-links-section">
+    <h2>Need Help Getting Baby Essentials?</h2>
+    <p class="resources-page-description">Here are some organizations that provide free resources and support to expecting mothers.</p>
 
-  <ul>
-    <li>
-      <a href="https://www.fns.usda.gov/wic">
-        A suborganization of the USDA, WIC provides support to expecting
-        mothers in need
-      </a>
-    </li>
-    <li>
-      <a href="https://aeroflowbreastpumps.com/qualify-through-insurance">
-        Aeroflow provides free resources to pregnant moms with qualifying
-        insurance
-      </a>
-    </li>
-    <li>
-      Both Walmart and Target offer free supplies when you start a baby
-      registry with them, no purchase required:
-      <ul>
-        <li>
-          <a href="https://www.walmart.com/cp/baby-registry/1229485">Walmart</a>
-        </li>
-        <li>
-          <a href="https://www.target.com/gift-registry/create-baby-registry">Target</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
+    <div class="resource-cards">
+      <div class="resource-card">
+        <h3>WIC Program</h3>
+        <p>A suborganization of the USDA, WIC provides support to expecting mothers in need</p>
+        <a href="https://www.fns.usda.gov/wic" target="_blank" class="resource-link">Learn More →</a>
+      </div>
+
+      <div class="resource-card">
+        <h3>Aeroflow Breastpumps</h3>
+        <p>Provides free resources to pregnant moms with qualifying insurance</p>
+        <a href="https://aeroflowbreastpumps.com/qualify-through-insurance" target="_blank" class="resource-link">Learn More →</a>
+      </div>
+
+      <div class="resource-card">
+        <h3>Baby Registry Programs</h3>
+        <p>Both Walmart and Target offer free supplies when you start a baby registry with them, no purchase required</p>
+        <div class="registry-links">
+          <a href="https://www.walmart.com/cp/baby-registry/1229485" target="_blank" class="resource-link">Walmart →</a>
+          <a href="https://www.target.com/gift-registry/create-baby-registry" target="_blank" class="resource-link">Target →</a>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="{{ url_for('static', filename='js/resources.js') }}"></script>
 </body>
 

@@ -28,21 +28,18 @@ def save_location():
     if not data:
         return jsonify({'error': 'No data provided'}), 400
     
-    # Extract coordinates
     lat = data.get('latitude')
     lon = data.get('longitude')
     
     if lat is None or lon is None:
         return jsonify({'error': 'Latitude and longitude are required'}), 400
     
-    # Extract properties
     properties = data.get('properties', {})
     name = properties.get('name') or properties.get('address_line1') or "Unnamed location"
     formal = properties.get('formatted') or properties.get('formal')
     address_line1 = properties.get('address_line1')
     address_line2 = properties.get('address_line2')
     
-    # Create new location
     loc = Location(
         name=name,
         formal=formal,
@@ -92,4 +89,38 @@ def get_saved_videos(user_id: int):
         'count': len(videos),
         'results': schema.dump(videos, many = True)
     })
+
+@bp.delete('/delete-video/<int:video_id>')
+@login_required
+def delete_video(video_id: int):
+    """Delete a saved video for the current user"""
+    video = db.session.get(SavedVideo, video_id)
+    
+    if not video:
+        return jsonify({'error': 'Video not found'}), 404
+    
+    if video.user_id != current_user.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    db.session.delete(video)
+    db.session.commit()
+    
+    return jsonify({'message': 'Video deleted successfully'}), 200
+
+@bp.delete('/delete-location/<int:location_id>')
+@login_required
+def delete_location(location_id: int):
+    """Delete a saved location for the current user"""
+    location = db.session.get(Location, location_id)
+    
+    if not location:
+        return jsonify({'error': 'Location not found'}), 404
+    
+    if location.user_id != current_user.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    db.session.delete(location)
+    db.session.commit()
+    
+    return jsonify({'message': 'Location deleted successfully'}), 200
     

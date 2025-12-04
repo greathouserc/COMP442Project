@@ -54,3 +54,25 @@
   padding: 20px 16px;
   margin: 0;
 }
+
+@media screen and (max-width: 768px) {
+  .navbar-container #nav-bar ul li a {
+    padding: 16px 12px;
+    font-size: 0.9rem;
+  }
+
+  .navbar-container #nav-bar ul li a[title="Profile"] {
+    padding: 12px 12px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-container #nav-bar ul li a {
+    padding: 14px 8px;
+    font-size: 0.85rem;
+  }
+
+  .navbar-container #nav-bar ul li a[title="Profile"] {
+    padding: 10px 8px;
+  }
+}
