@@ -70,8 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
         savedBtn.addEventListener("click", (event) => {
             console.log("Saved Locations button clicked");
             resetButtonColors(savedBtn);
-            const userEmail = getUserEmail();
-            userEmail.then(getSavedLocations).then(renderPlaces);
+            const userId = getUserId();
+            userId.then(getSavedLocations).then(renderPlaces);
         });
     }
     if (clearBtn) {
@@ -82,8 +82,38 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     if (saveLocBtn) {
-        saveLocBtn.addEventListener("click", (event) => {
+        saveLocBtn.addEventListener("click", async (event) => {
             console.log("Save Location button clicked");
+            if (!chosenFeature) {
+                window.toast.error("Please select a location on the map first");
+                return;
+            }
+            try {
+                const response = await fetch('/api/save-location/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        latitude: chosenFeature.geometry.coordinates[1],
+                        longitude: chosenFeature.geometry.coordinates[0],
+                        properties: chosenFeature.properties
+                    })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    window.toast.success("Location saved successfully!");
+                    console.log("Saved location:", data);
+                }
+                else {
+                    const error = await response.json();
+                    window.toast.error(error.error || "Failed to save location");
+                }
+            }
+            catch (error) {
+                console.error("Error saving location:", error);
+                window.toast.error("An error occurred while saving the location");
+            }
         });
     }
     async function loadPlaces(cats) {
@@ -144,13 +174,20 @@ document.addEventListener("DOMContentLoaded", () => {
             .replaceAll("'", "&#039;");
     }
     function resetButtonColors(btn) {
-        healthBtn.style.backgroundColor = "#333333";
-        socialBtn.style.backgroundColor = "#333333";
-        childcareBtn.style.backgroundColor = "#333333";
-        storeBtn.style.backgroundColor = "#333333";
-        churchBtn.style.backgroundColor = "#333333";
-        savedBtn.style.backgroundColor = "#333333";
-        clearBtn.style.backgroundColor = "#333333";
+        if (healthBtn)
+            healthBtn.style.backgroundColor = "#333333";
+        if (socialBtn)
+            socialBtn.style.backgroundColor = "#333333";
+        if (childcareBtn)
+            childcareBtn.style.backgroundColor = "#333333";
+        if (storeBtn)
+            storeBtn.style.backgroundColor = "#333333";
+        if (churchBtn)
+            churchBtn.style.backgroundColor = "#333333";
+        if (savedBtn)
+            savedBtn.style.backgroundColor = "#333333";
+        if (clearBtn)
+            clearBtn.style.backgroundColor = "#333333";
         btn.style.backgroundColor = "#4CAF50";
     }
     async function getLocation() {
@@ -173,16 +210,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return [latitude, longitude];
     }
 });
-async function getUserEmail() {
+async function getUserId() {
     const response = await fetch('/api/user-info/');
     if (!response.ok) {
         throw new Error(`DB Error: ${response.statusText}`);
     }
     const userData = await response.json();
-    return userData.email;
+    return userData.id;
 }
-async function getSavedLocations(userEmail) {
-    const response = await fetch(`/api/get-locations/${userEmail}/`);
+async function getSavedLocations(userId) {
+    const response = await fetch(`/api/get-locations/${userId}/`);
     if (!response.ok) {
         throw new Error(`DB Error: ${response.statusText}`);
     }

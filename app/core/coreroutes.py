@@ -1,9 +1,10 @@
-from flask import render_template, flash, redirect, url_for, request, current_app
-from flask_login import current_user
+from flask import render_template, flash, redirect, url_for, request, current_app, jsonify
+from flask_login import current_user, login_required
 from flask_mail import Message
-from app import mail
+from app import db, mail
 from app.core import bp
 from app.core.contactforms import ContactForm
+from app.core.coremodels import Location, SavedVideo
 import threading
 import smtplib
 import ssl
@@ -21,11 +22,34 @@ def resources():
 
 @bp.route('/resource_library/')
 def resource_library():
-    return render_template('core/resources.json')
+    import json
+    import os
+    app_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    json_path = os.path.join(app_root, 'templates', 'core', 'resources.json')
+    with open(json_path, 'r') as f:
+        data = json.load(f)
+    return jsonify(data)
 
 @bp.route('/help/')
 def get_help():
     return render_template('core/help.html', user=current_user)
+
+@bp.route('/profile/')
+@login_required
+def profile():
+    """Display the user's profile page with saved videos and locations"""
+    videos_query = db.select(SavedVideo).filter(SavedVideo.user_id == current_user.id)
+    videos_rows = db.session.execute(videos_query).all()
+    saved_videos = [row[0] for row in videos_rows]
+    
+    locations_query = db.select(Location).filter(Location.user_id == current_user.id)
+    locations_rows = db.session.execute(locations_query).all()
+    saved_locations = [row[0] for row in locations_rows]
+    
+    return render_template('core/profile_page.html', 
+                         user=current_user,
+                         saved_videos=saved_videos,
+                         saved_locations=saved_locations)
 
 def send_async_email(app, msg):
     """Send email in background thread"""

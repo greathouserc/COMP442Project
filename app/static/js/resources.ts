@@ -18,7 +18,7 @@ interface Resource {
 }
 
 async function loadResources() {
-    const indexResponse = await fetch("http://127.0.0.1:5000/resource_library");
+    const indexResponse = await fetch("/resource_library");
     const index = <ResourceIndex> await validateJSON(indexResponse);
     
     const advice = document.getElementById("general-advice");

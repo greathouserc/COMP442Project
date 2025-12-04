@@ -24,7 +24,9 @@ def post_registration():
     if form.validate():
         email = form.email.data
         password = form.password.data
-        if User.query.get(email) is not None:
+        # adding check for email since id is now primary key
+        existing_user = db.session.execute(select(User).filter(User.email == email)).first()
+        if existing_user is not None:
             return render_template('auth/register.html', form=form, user_exists=True)
         else:
             new_user = User(email=email, password=password)

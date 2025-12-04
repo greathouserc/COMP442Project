@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/toast.css') }}" />
+
+  <title>Profile</title>
+</head>
+
+<body class="profile-page">
+  <!-- Header & Navigation -->
+  <header>
+    <div class="navbar-container">
+      <nav id="nav-bar">
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/help">Find Help</a></li>
+         <li><a href="#connect">Connect</a></li>
+          {% if user.is_authenticated == true %}
+          <li style="float: right">
+            <a href="/profile" title="Profile" style="display: flex; align-items: center;"><img src="{{ url_for('static', filename='images/girl.png') }}" alt="Profile" style="width: 34px; height: 34px;"></a>
+          </li>
+          {% else %}
+          <li style="float: right">
+            <a href="{{ url_for('auth.get_login') }}">Login</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Profile Content -->
+  <main class="profile-content">
+    <div class="container">
+      <h1>My Profile</h1>
+      
+      <!-- User Information Section -->
+      <section class="profile-section user-info">
+        <h2>Account Information</h2>
+        <div class="info-card">
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{ user.email }}</span>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <a href="{{ url_for('auth.route_logout') }}" class="btn-logout">Logout</a>
+        </div>
+      </section>
+
+      <!-- Saved Videos Section -->
+      <section class="profile-section saved-videos">
+        <h2>Saved Videos</h2>
+        {% if saved_videos %}
+        <div class="videos-grid">
+          {% for video in saved_videos %}
+          <div class="video-card">
+            <div class="video-embed">
+              <iframe 
+                width="280" 
+                height="158" 
+                src="https://www.youtube.com/embed/{{ video.video_url }}" 
+                title="{{ video.title or 'YouTube video' }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            {% if video.title %}
+            <div class="video-info">
+              <h3>{{ video.title }}</h3>
+              {% if video.video_type %}
+              <span class="video-type-badge type-{{ video.video_type }}">
+                {% if video.video_type == 'G' %}General Advice
+                {% elif video.video_type == 'M' %}Medical/Health
+                {% elif video.video_type == 'S' %}Spiritual/Mental
+                {% endif %}
+              </span>
+              {% endif %}
+            </div>
+            {% endif %}
+            <a href="https://www.youtube.com/watch?v={{ video.video_url }}" 
+               target="_blank" 
+               class="video-link">Watch on YouTube</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-message">You haven't saved any videos yet. Visit the <a href="/resources">Resources</a> page to find helpful videos!</p>
+        {% endif %}
+      </section>
+
+      <!-- Saved Locations Section -->
+      <section class="profile-section saved-locations">
+        <h2>Saved Locations</h2>
+        {% if saved_locations %}
+        <div class="locations-list">
+          {% for location in saved_locations %}
+          <div class="location-card">
+            <div class="location-icon">📍</div>
+            <div class="location-details">
+              {% if location.name %}
+              <h3>{{ location.name }}</h3>
+              {% endif %}
+              {% if location.formal %}
+              <p class="location-formal">{{ location.formal }}</p>
+              {% endif %}
+              {% if location.address_line1 %}
+              <p class="location-address">{{ location.address_line1 }}</p>
+              {% endif %}
+              {% if location.address_line2 %}
+              <p class="location-address-2">{{ location.address_line2 }}</p>
+              {% endif %}
+              <div class="location-coords">
+                <span>Lat: {{ "%.5f"|format(location.latitude) }}</span>
+                <span>Lon: {{ "%.5f"|format(location.longitude) }}</span>
+              </div>
+            </div>
+            <a href="https://www.google.com/maps?q={{ location.latitude }},{{ location.longitude }}" 
+               target="_blank" 
+               class="location-link">View on Map</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-message">You haven't saved any locations yet. Visit the <a href="/help">Find Help</a> page to save locations!</p>
+        {% endif %}
+      </section>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/toast.js') }}"></script>
+</body>
+</html>

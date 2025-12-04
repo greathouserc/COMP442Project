@@ -131,8 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Saved Locations button clicked");
             resetButtonColors(savedBtn);
             
-            const userEmail = getUserEmail();
-            userEmail.then(getSavedLocations).then(renderPlaces);
+            const userId = getUserId();
+            userId.then(getSavedLocations).then(renderPlaces);
         });
     }
 
@@ -145,11 +145,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (saveLocBtn) {
-        saveLocBtn.addEventListener("click", (event: MouseEvent) => {
+        saveLocBtn.addEventListener("click", async (event: MouseEvent) => {
             console.log("Save Location button clicked");
-
             
-
+            if (!chosenFeature) {
+                (window as any).toast.error("Please select a location on the map first");
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/save-location/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        latitude: chosenFeature.geometry.coordinates[1],
+                        longitude: chosenFeature.geometry.coordinates[0],
+                        properties: chosenFeature.properties
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    (window as any).toast.success("Location saved successfully!");
+                    console.log("Saved location:", data);
+                } else {
+                    const error = await response.json();
+                    (window as any).toast.error(error.error || "Failed to save location");
+                }
+            } catch (error) {
+                console.error("Error saving location:", error);
+                (window as any).toast.error("An error occurred while saving the location");
+            }
         });
     }
 
@@ -251,13 +279,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function resetButtonColors(btn: HTMLAnchorElement){
-        healthBtn.style.backgroundColor = "#333333";
-        socialBtn.style.backgroundColor = "#333333";
-        childcareBtn.style.backgroundColor = "#333333";
-        storeBtn.style.backgroundColor = "#333333";
-        churchBtn.style.backgroundColor = "#333333";
-        savedBtn.style.backgroundColor = "#333333";
-        clearBtn.style.backgroundColor = "#333333";
+        if (healthBtn) healthBtn.style.backgroundColor = "#333333";
+        if (socialBtn) socialBtn.style.backgroundColor = "#333333";
+        if (childcareBtn) childcareBtn.style.backgroundColor = "#333333";
+        if (storeBtn) storeBtn.style.backgroundColor = "#333333";
+        if (churchBtn) churchBtn.style.backgroundColor = "#333333";
+        if (savedBtn) savedBtn.style.backgroundColor = "#333333";
+        if (clearBtn) clearBtn.style.backgroundColor = "#333333";
 
         btn.style.backgroundColor = "#4CAF50";
     }
@@ -288,10 +316,11 @@ document.addEventListener("DOMContentLoaded", () => {
 //comment
 
 interface UserData{
+    id: number;
     email: string;
 }
 
-async function getUserEmail(): Promise<string>{
+async function getUserId(): Promise<number>{
 
     const response = await fetch('/api/user-info/');
     if(!response.ok){
@@ -299,11 +328,11 @@ async function getUserEmail(): Promise<string>{
     }
     const userData: UserData = await response.json();
 
-    return userData.email;
+    return userData.id;
 }
 
-async function getSavedLocations(userEmail: string): Promise<GeoJSONData>{
-    const response = await fetch(`/api/get-locations/${userEmail}/`);
+async function getSavedLocations(userId: number): Promise<GeoJSONData>{
+    const response = await fetch(`/api/get-locations/${userId}/`);
     if(!response.ok){
         throw new Error(`DB Error: ${response.statusText}`);
     }
