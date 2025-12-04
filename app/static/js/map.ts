@@ -279,13 +279,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function resetButtonColors(btn: HTMLAnchorElement){
-        if (healthBtn) healthBtn.style.backgroundColor = "#333333";
-        if (socialBtn) socialBtn.style.backgroundColor = "#333333";
-        if (childcareBtn) childcareBtn.style.backgroundColor = "#333333";
-        if (storeBtn) storeBtn.style.backgroundColor = "#333333";
-        if (churchBtn) churchBtn.style.backgroundColor = "#333333";
-        if (savedBtn) savedBtn.style.backgroundColor = "#333333";
-        if (clearBtn) clearBtn.style.backgroundColor = "#333333";
+        healthBtn.style.backgroundColor = "#333333";
+        socialBtn.style.backgroundColor = "#333333";
+        childcareBtn.style.backgroundColor = "#333333";
+        storeBtn.style.backgroundColor = "#333333";
+        churchBtn.style.backgroundColor = "#333333";
+        savedBtn.style.backgroundColor = "#333333";
+        clearBtn.style.backgroundColor = "#333333";
 
         btn.style.backgroundColor = "#4CAF50";
     }
