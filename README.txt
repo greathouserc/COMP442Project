@@ -8,3 +8,6 @@ pip install -r requirements.txt
 Install GeoJson package with: 
 
 npm install --save-dev @types/geojson
+
+To access mobile site: 
+run in terminal ->    flask run --host=0.0.0.0 
