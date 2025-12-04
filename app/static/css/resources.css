@@ -121,12 +121,46 @@
     white-space: nowrap;
 }
 
+.video-container {
+    display: inline-block;
+    position: relative;
+    margin-right: 1rem;
+    vertical-align: top;
+}
+
 .resources-page #general-advice iframe,
 .resources-page #medical-health iframe,
 .resources-page #spiritual-health iframe {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-right: 1rem;
+    display: block;
+}
+
+.save-video-btn {
+    display: block;
+    width: 280px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background-color: #333333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.save-video-btn.saved {
+    background-color: #4CAF50;
+}
+
+.save-video-btn.saved:hover {
+    background-color: #45a049;
+}
+
+.save-video-btn:active {
+    transform: scale(0.98);
 }
 
 @media screen and (max-width: 768px) {

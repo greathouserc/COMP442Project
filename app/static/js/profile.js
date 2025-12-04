@@ -7,9 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Video ID not found');
                 return;
             }
-            if (!confirm('Are you sure you want to delete this video?')) {
-                return;
-            }
             try {
                 const response = await fetch(`/api/delete-video/${videoId}`, {
                     method: 'DELETE'
@@ -42,9 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const locationId = button.dataset.locationId;
             if (!locationId) {
                 console.error('Location ID not found');
-                return;
-            }
-            if (!confirm('Are you sure you want to delete this location?')) {
                 return;
             }
             try {

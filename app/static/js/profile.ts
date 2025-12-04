@@ -10,10 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            if (!confirm('Are you sure you want to delete this video?')) {
-                return;
-            }
-            
             try {
                 const response = await fetch(`/api/delete-video/${videoId}`, {
                     method: 'DELETE'
@@ -49,10 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!locationId) {
                 console.error('Location ID not found');
-                return;
-            }
-            
-            if (!confirm('Are you sure you want to delete this location?')) {
                 return;
             }
             

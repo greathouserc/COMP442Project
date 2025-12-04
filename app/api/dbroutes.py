@@ -90,6 +90,45 @@ def get_saved_videos(user_id: int):
         'results': schema.dump(videos, many = True)
     })
 
+@bp.post('/save-video/')
+@login_required
+def save_video():
+    """Save a video for the current user"""
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+    
+    video_url = data.get('video_url')
+    if not video_url:
+        return jsonify({'error': 'Video URL is required'}), 400
+    
+    existing = db.session.execute(
+        db.select(SavedVideo).filter(
+            SavedVideo.user_id == current_user.id,
+            SavedVideo.video_url == video_url
+        )
+    ).first()
+    
+    if existing:
+        return jsonify({'error': 'Video already saved'}), 409
+    
+    video = SavedVideo(
+        video_url=video_url,
+        title=data.get('title'),
+        video_type=data.get('video_type'),
+        user_id=current_user.id
+    )
+    
+    db.session.add(video)
+    db.session.commit()
+    
+    schema = SavedVideoSchema()
+    return jsonify({
+        'message': 'Video saved successfully',
+        'video': schema.dump(video)
+    }), 201
+
 @bp.delete('/delete-video/<int:video_id>')
 @login_required
 def delete_video(video_id: int):
