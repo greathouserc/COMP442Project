@@ -69,6 +69,9 @@
             <a href="{{ url_for('auth.route_logout') }}" class="btn-logout"
               >Logout</a
             >
+            <button class="btn-delete-account" id="delete-account-btn"
+              >Delete Account</button
+            >
           </div>
         </section>
 
@@ -147,7 +150,7 @@
                   href="https://www.google.com/maps?q={{ location.latitude }},{{ location.longitude }}"
                   target="_blank"
                   class="location-link"
-                  >View on Map</a
+                  >Directions</a
                 >
                 <button
                   class="btn-delete-location"
@@ -168,6 +171,32 @@
         </section>
       </div>
     </main>
+
+    <!-- Delete Account Modal -->
+    <div id="delete-account-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Delete Account</h2>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p class="confirmation-text">
+            Type <strong>delete</strong> to confirm:
+          </p>
+          <input
+            type="text"
+            id="delete-confirmation-input"
+            class="modal-input"
+          />
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" id="cancel-delete-btn">Cancel</button>
+          <button class="btn-confirm-delete" id="confirm-delete-btn" disabled>
+            Delete My Account
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/toast.js') }}"></script>

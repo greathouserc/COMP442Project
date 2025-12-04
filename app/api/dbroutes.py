@@ -1,11 +1,11 @@
 from flask import request, jsonify, abort
 from sqlalchemy.sql.expression import select, desc
 from datetime import datetime, UTC
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 
 from app import db
 from app.api import bp
-from app.auth.authmodels import UserSchema
+from app.auth.authmodels import UserSchema, User
 from app.core.coremodels import Location, LocationSchema, SavedVideo, SavedVideoSchema
 
 ################################################################################
@@ -162,4 +162,28 @@ def delete_location(location_id: int):
     db.session.commit()
     
     return jsonify({'message': 'Location deleted successfully'}), 200
+
+@bp.delete('/delete-account/')
+@login_required
+def delete_account():
+    """Delete the current user's account and all associated data"""
+    user_id = current_user.id
+    
+    db.session.execute(
+        db.delete(SavedVideo).filter(SavedVideo.user_id == user_id)
+    )
+    
+    db.session.execute(
+        db.delete(Location).filter(Location.user_id == user_id)
+    )
+    
+    user = db.session.get(User, user_id)
+    if user:
+        db.session.delete(user)
+    
+    db.session.commit()
+    
+    logout_user()
+    
+    return jsonify({'message': 'Account deleted successfully'}), 200
     

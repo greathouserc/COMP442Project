@@ -1,4 +1,85 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const deleteAccountBtn = <HTMLButtonElement> document.getElementById('delete-account-btn');
+    const modal = document.getElementById('delete-account-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const cancelBtn = <HTMLButtonElement> document.getElementById('cancel-delete-btn');
+    const confirmBtn = <HTMLButtonElement> document.getElementById('confirm-delete-btn');
+    const confirmInput = <HTMLInputElement> document.getElementById('delete-confirmation-input');
+    
+    if (deleteAccountBtn && modal) {
+        deleteAccountBtn.addEventListener('click', () => {
+            modal.classList.add('show');
+            if (confirmInput) {
+                confirmInput.value = '';
+                confirmInput.focus();
+            }
+            if (confirmBtn) {
+                confirmBtn.disabled = true;
+            }
+        });
+        
+        const closeModalHandler = () => {
+            modal.classList.remove('show');
+            if (confirmInput) {
+                confirmInput.value = '';
+            }
+        };
+        
+        if (closeModal) {
+            closeModal.addEventListener('click', closeModalHandler);
+        }
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', closeModalHandler);
+        }
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModalHandler();
+            }
+        });
+        if (confirmInput && confirmBtn) {
+            confirmInput.addEventListener('input', () => {
+                confirmBtn.disabled = confirmInput.value !== 'delete';
+            });
+        }
+        
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', async () => {
+                if (confirmInput?.value !== 'delete') {
+                    return;
+                }
+                
+                confirmBtn.disabled = true;
+                confirmBtn.textContent = 'Deleting...';
+                
+                try {
+                    const response = await fetch('/api/delete-account/', {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        modal.classList.remove('show');
+                        (window as any).toast.success('Account deleted successfully!');
+                        setTimeout(() => {
+                            window.location.href = '/home';
+                        }, 2000);
+                    } else {
+                        const error = await response.json();
+                        (window as any).toast.error(error.error || 'Failed to delete account');
+                        confirmBtn.disabled = false;
+                        confirmBtn.textContent = 'Delete My Account';
+                    }
+                } catch (error) {
+                    console.error('Error deleting account:', error);
+                    (window as any).toast.error('An error occurred while deleting the account');
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'Delete My Account';
+                }
+            });
+        }
+    }
+    
     const deleteVideoButtons = document.querySelectorAll('.btn-delete-video') as NodeListOf<HTMLButtonElement>;
     
     deleteVideoButtons.forEach(button => {

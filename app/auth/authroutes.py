@@ -33,7 +33,15 @@ def post_registration():
 
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('auth.get_login'))
+            
+            # Log in the newly created user
+            login_user(new_user)
+            
+            # Redirect to home page
+            if 'HOME_PAGE' in current_app.config:
+                return redirect(str(current_app.config['HOME_PAGE']))
+            else:
+                return redirect(url_for('core.index'))
     else:
         for field, error_msg in form.errors.items():
             flash(f'{field}: {error_msg}')
