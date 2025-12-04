@@ -66,11 +66,11 @@
             </div>
           </div>
           <div class="profile-actions">
+            <button class="btn-change-password" id="change-password-btn">
+              Change Password
+            </button>
             <a href="{{ url_for('auth.route_logout') }}" class="btn-logout"
               >Logout</a
-            >
-            <button class="btn-delete-account" id="delete-account-btn"
-              >Delete Account</button
             >
           </div>
         </section>
@@ -129,7 +129,6 @@
           {% endif %}
         </section>
 
-
         <!-- Saved Locations Section -->
         <section class="profile-section saved-locations">
           <h2>Saved Locations</h2>
@@ -169,8 +168,85 @@
           </p>
           {% endif %}
         </section>
+
+        <section class="profile-section">
+          <div class="profile-actions">
+            <button class="btn-delete-account" id="delete-account-btn">
+              Delete Account
+            </button>
+          </div>
+        </section>
       </div>
     </main>
+
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Change Password</h2>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <form
+            id="change-password-form"
+            method="POST"
+            action="{{ url_for('auth.change_password') }}"
+          >
+            <div class="form-group">
+              <label for="current-password-input">Current Password</label>
+              <input
+                type="password"
+                id="current-password-input"
+                name="current_password"
+                required
+                class="modal-input"
+              />
+            </div>
+            <div class="form-group">
+              <label for="new-password-input"
+                >New Password (min 12 characters)</label
+              >
+              <input
+                type="password"
+                id="pwd-input"
+                name="new_password"
+                required
+                class="modal-input"
+              />
+            </div>
+            <div class="form-group">
+              <label for="confirm-new-password-input"
+                >Confirm New Password</label
+              >
+              <input
+                type="password"
+                id="pwd-confirm"
+                name="confirm_new_password"
+                required
+                class="modal-input"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            id="cancel-change-password-btn"
+            class="btn-cancel"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            form="change-password-form"
+            id="confirm-change-password-btn"
+            class="btn-change-password"
+          >
+            Change Password
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Delete Account Modal -->
     <div id="delete-account-modal" class="modal">
@@ -200,6 +276,7 @@
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/toast.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validate_form.js') }}"></script>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
   </body>
 </html>

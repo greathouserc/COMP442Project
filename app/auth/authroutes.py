@@ -100,3 +100,51 @@ def post_login():
 def route_logout():
     logout_user()
     return redirect(url_for('core.index'))
+
+@bp.post('/change-password/')
+@login_required
+def change_password():
+    """Change the current user's password"""
+    from flask import request, jsonify
+    from app.auth.authforms import ChangePasswordForm
+    
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    
+    form: ChangePasswordForm = ChangePasswordForm(meta={'csrf': False}) if is_ajax else ChangePasswordForm()
+    
+    if form.validate():
+        current_password = form.current_password.data
+        new_password = form.new_password.data
+        confirm_new_password = form.confirm_new_password.data
+        
+        if not current_user.verify_password(current_password):
+            if is_ajax:
+                return jsonify({'error': 'Current password is incorrect'}), 400
+            flash('Current password is incorrect', 'error')
+            return redirect(url_for('core.profile'))
+        
+        if new_password != confirm_new_password:
+            if is_ajax:
+                return jsonify({'error': 'New passwords do not match'}), 400
+            flash('New passwords do not match', 'error')
+            return redirect(url_for('core.profile'))
+        
+        current_user.password = new_password
+        db.session.commit()
+        
+        if is_ajax:
+            return jsonify({'message': 'Password changed successfully'}), 200
+        flash('Password changed successfully', 'success')
+        return redirect(url_for('core.profile'))
+    else:
+        error_messages = []
+        for field, errors in form.errors.items():
+            for error in errors:
+                error_messages.append(f'{field}: {error}')
+        
+        if is_ajax:
+            return jsonify({'error': '; '.join(error_messages)}), 400
+        
+        for msg in error_messages:
+            flash(msg, 'error')
+        return redirect(url_for('core.profile'))

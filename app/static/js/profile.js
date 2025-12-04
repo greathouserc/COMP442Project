@@ -1,7 +1,119 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const flashMessages = document.getElementById('flash-messages');
+    if (flashMessages) {
+        const messages = flashMessages.querySelectorAll('[data-category]');
+        messages.forEach((msg) => {
+            const category = msg.getAttribute('data-category') || 'info';
+            const text = msg.textContent || '';
+            if (category === 'success') {
+                window.toast.success(text);
+            }
+            else if (category === 'error') {
+                window.toast.error(text);
+            }
+            else if (category === 'warning') {
+                window.toast.warning(text);
+            }
+            else {
+                window.toast.info(text);
+            }
+        });
+    }
+    const changePasswordBtn = document.getElementById('change-password-btn');
+    const changePasswordModal = document.getElementById('change-password-modal');
+    const cancelChangePasswordBtn = document.getElementById('cancel-change-password-btn');
+    const changePasswordForm = document.getElementById('change-password-form');
+    const newPasswordInput = document.getElementById('new-password-input');
+    const confirmNewPasswordInput = document.getElementById('confirm-new-password-input');
+    if (changePasswordBtn && changePasswordModal) {
+        changePasswordBtn.addEventListener('click', () => {
+            changePasswordModal.classList.add('show');
+            if (changePasswordForm) {
+                changePasswordForm.reset();
+            }
+        });
+        const closeChangePasswordModal = () => {
+            changePasswordModal.classList.remove('show');
+            if (changePasswordForm) {
+                changePasswordForm.reset();
+            }
+        };
+        if (cancelChangePasswordBtn) {
+            cancelChangePasswordBtn.addEventListener('click', closeChangePasswordModal);
+        }
+        const closeModalBtns = changePasswordModal.querySelectorAll('.close-modal');
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeChangePasswordModal);
+        });
+        changePasswordModal.addEventListener('click', (e) => {
+            if (e.target === changePasswordModal) {
+                closeChangePasswordModal();
+            }
+        });
+        if (confirmNewPasswordInput) {
+            confirmNewPasswordInput.addEventListener('input', () => {
+                if (newPasswordInput.value !== confirmNewPasswordInput.value) {
+                    confirmNewPasswordInput.setCustomValidity('Passwords do not match');
+                }
+                else {
+                    confirmNewPasswordInput.setCustomValidity('');
+                }
+            });
+        }
+        if (newPasswordInput) {
+            newPasswordInput.addEventListener('input', () => {
+                if (confirmNewPasswordInput.value && newPasswordInput.value !== confirmNewPasswordInput.value) {
+                    confirmNewPasswordInput.setCustomValidity('Passwords do not match');
+                }
+                else {
+                    confirmNewPasswordInput.setCustomValidity('');
+                }
+            });
+        }
+        if (changePasswordForm) {
+            changePasswordForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const currentPasswordInput = document.getElementById('current-password-input');
+                const newPwdInput = document.getElementById('pwd-input');
+                const confirmPwdInput = document.getElementById('pwd-confirm');
+                const submitBtn = document.getElementById('confirm-change-password-btn');
+                if (!currentPasswordInput || !newPwdInput || !confirmPwdInput || !submitBtn) {
+                    return;
+                }
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Changing...';
+                const formData = new FormData(changePasswordForm);
+                try {
+                    const response = await fetch('/auth/change-password/', {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        window.toast.success(data.message || 'Password changed successfully!');
+                        closeChangePasswordModal();
+                    }
+                    else {
+                        window.toast.error(data.error || 'Failed to change password');
+                    }
+                }
+                catch (error) {
+                    console.error('Error changing password:', error);
+                    window.toast.error('An error occurred while changing the password');
+                }
+                finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Change Password';
+                }
+            });
+        }
+    }
     const deleteAccountBtn = document.getElementById('delete-account-btn');
     const modal = document.getElementById('delete-account-modal');
-    const closeModal = document.querySelector('.close-modal');
+    const closeModal = modal?.querySelector('.close-modal');
     const cancelBtn = document.getElementById('cancel-delete-btn');
     const confirmBtn = document.getElementById('confirm-delete-btn');
     const confirmInput = document.getElementById('delete-confirmation-input');
