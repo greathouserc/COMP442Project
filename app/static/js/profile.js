@@ -1,3 +1,67 @@
+function createModalCloser(modal, form, input) {
+    return () => {
+        modal.classList.remove('show');
+        if (form) {
+            form.reset();
+        }
+        if (input) {
+            input.value = '';
+        }
+    };
+}
+function setupModalCloseHandlers(modal, closeHandler, closeButtons, allowClickOutside = true) {
+    closeButtons.forEach(btn => {
+        if (btn) {
+            btn.addEventListener('click', closeHandler);
+        }
+    });
+    if (allowClickOutside) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeHandler();
+            }
+        });
+    }
+}
+function setupPasswordValidation(passwordInput, confirmPasswordInput) {
+    const validatePasswords = () => {
+        if (passwordInput.value && confirmPasswordInput.value &&
+            passwordInput.value !== confirmPasswordInput.value) {
+            confirmPasswordInput.setCustomValidity('Passwords do not match');
+        }
+        else {
+            confirmPasswordInput.setCustomValidity('');
+        }
+    };
+    passwordInput.addEventListener('input', validatePasswords);
+    confirmPasswordInput.addEventListener('input', validatePasswords);
+}
+async function deleteItem(itemId, apiEndpoint, itemName, cardSelector, parentSelector, button) {
+    try {
+        const response = await fetch(`${apiEndpoint}/${itemId}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            window.toast.success(`${itemName} deleted successfully!`);
+            const card = button.closest(cardSelector);
+            if (card) {
+                card.remove();
+            }
+            const parent = document.querySelector(parentSelector);
+            if (parent && parent.children.length === 0) {
+                location.reload();
+            }
+        }
+        else {
+            const error = await response.json();
+            window.toast.error(error.error || `Failed to delete ${itemName.toLowerCase()}`);
+        }
+    }
+    catch (error) {
+        console.error(`Error deleting ${itemName.toLowerCase()}:`, error);
+        window.toast.error(`An error occurred while deleting the ${itemName.toLowerCase()}`);
+    }
+}
 document.addEventListener('DOMContentLoaded', () => {
     const flashMessages = document.getElementById('flash-messages');
     if (flashMessages) {
@@ -32,43 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 changePasswordForm.reset();
             }
         });
-        const closeChangePasswordModal = () => {
-            changePasswordModal.classList.remove('show');
-            if (changePasswordForm) {
-                changePasswordForm.reset();
-            }
-        };
-        if (cancelChangePasswordBtn) {
-            cancelChangePasswordBtn.addEventListener('click', closeChangePasswordModal);
-        }
+        const closeChangePasswordModal = createModalCloser(changePasswordModal, changePasswordForm);
         const closeModalBtns = changePasswordModal.querySelectorAll('.close-modal');
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', closeChangePasswordModal);
-        });
-        changePasswordModal.addEventListener('click', (e) => {
-            if (e.target === changePasswordModal) {
-                closeChangePasswordModal();
-            }
-        });
-        if (confirmNewPasswordInput) {
-            confirmNewPasswordInput.addEventListener('input', () => {
-                if (newPasswordInput.value !== confirmNewPasswordInput.value) {
-                    confirmNewPasswordInput.setCustomValidity('Passwords do not match');
-                }
-                else {
-                    confirmNewPasswordInput.setCustomValidity('');
-                }
-            });
-        }
-        if (newPasswordInput) {
-            newPasswordInput.addEventListener('input', () => {
-                if (confirmNewPasswordInput.value && newPasswordInput.value !== confirmNewPasswordInput.value) {
-                    confirmNewPasswordInput.setCustomValidity('Passwords do not match');
-                }
-                else {
-                    confirmNewPasswordInput.setCustomValidity('');
-                }
-            });
+        setupModalCloseHandlers(changePasswordModal, closeChangePasswordModal, [cancelChangePasswordBtn, ...Array.from(closeModalBtns)], false);
+        if (newPasswordInput && confirmNewPasswordInput) {
+            setupPasswordValidation(newPasswordInput, confirmNewPasswordInput);
         }
         if (changePasswordForm) {
             changePasswordForm.addEventListener('submit', async (e) => {
@@ -128,23 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmBtn.disabled = true;
             }
         });
-        const closeModalHandler = () => {
-            modal.classList.remove('show');
-            if (confirmInput) {
-                confirmInput.value = '';
-            }
-        };
-        if (closeModal) {
-            closeModal.addEventListener('click', closeModalHandler);
-        }
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', closeModalHandler);
-        }
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModalHandler();
-            }
-        });
+        const closeModalHandler = createModalCloser(modal, undefined, confirmInput);
+        setupModalCloseHandlers(modal, closeModalHandler, [closeModal, cancelBtn]);
         if (confirmInput && confirmBtn) {
             confirmInput.addEventListener('input', () => {
                 confirmBtn.disabled = confirmInput.value !== 'delete';
@@ -186,70 +203,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const deleteVideoButtons = document.querySelectorAll('.btn-delete-video');
     deleteVideoButtons.forEach(button => {
-        button.addEventListener('click', async (e) => {
+        button.addEventListener('click', async () => {
             const videoId = button.dataset.videoId;
             if (!videoId) {
                 console.error('Video ID not found');
                 return;
             }
-            try {
-                const response = await fetch(`/api/delete-video/${videoId}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    window.toast.success('Video deleted successfully!');
-                    const videoCard = button.closest('.video-card');
-                    if (videoCard) {
-                        videoCard.remove();
-                    }
-                    const videosGrid = document.querySelector('.videos-grid');
-                    if (videosGrid && videosGrid.children.length === 0) {
-                        location.reload();
-                    }
-                }
-                else {
-                    const error = await response.json();
-                    window.toast.error(error.error || 'Failed to delete video');
-                }
-            }
-            catch (error) {
-                console.error('Error deleting video:', error);
-                window.toast.error('An error occurred while deleting the video');
-            }
+            await deleteItem(videoId, '/api/delete-video', 'Video', '.video-card', '.videos-grid', button);
         });
     });
     const deleteLocationButtons = document.querySelectorAll('.btn-delete-location');
     deleteLocationButtons.forEach(button => {
-        button.addEventListener('click', async (e) => {
+        button.addEventListener('click', async () => {
             const locationId = button.dataset.locationId;
             if (!locationId) {
                 console.error('Location ID not found');
                 return;
             }
-            try {
-                const response = await fetch(`/api/delete-location/${locationId}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    window.toast.success('Location deleted successfully!');
-                    const locationCard = button.closest('.location-card');
-                    if (locationCard) {
-                        locationCard.remove();
-                    }
-                    const locationsList = document.querySelector('.locations-list');
-                    if (locationsList && locationsList.children.length === 0) {
-                        location.reload();
-                    }
-                }
-                else {
-                    const error = await response.json();
-                    window.toast.error(error.error || 'Failed to delete location');
-                }
-            }
-            catch (error) {
-                console.error('Error deleting location:', error);
-                window.toast.error('An error occurred while deleting the location');
-            }
+            await deleteItem(locationId, '/api/delete-location', 'Location', '.location-card', '.locations-list', button);
         });
     });
 });
