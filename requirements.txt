@@ -1,4 +1,4 @@
-# Python dependencies for COMP442Project
+
 Flask
 flask_login
 flask_sqlalchemy
@@ -14,5 +14,4 @@ uvicorn
 email_validator
 sqlalchemy_utils
 leaflet
-@types/geojson
 

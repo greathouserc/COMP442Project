@@ -45,7 +45,7 @@ class Location(db.Model):
     address_line2: Mapped[str] = mapped_column(nullable=True)
     latitude: Mapped[float] = mapped_column(nullable=False)
     longitude: Mapped[float] = mapped_column(nullable=False)
-    user: Mapped[str] = mapped_column(db.ForeignKey('Users.email'))
+    user_id: Mapped[int] = mapped_column(db.ForeignKey('Users.id'))
     def __str__(self):
         return f"Location(id={self.id})"
 
@@ -58,6 +58,16 @@ class Location(db.Model):
 #     def __str__(self):
 #         return f"Location(id={self.id})"
 
+class SavedVideo(db.Model):
+    __tablename__ = "SavedVideos"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    video_url: Mapped[str] = mapped_column(nullable=False)
+    title: Mapped[str] = mapped_column(nullable=True)
+    video_type: Mapped[str] = mapped_column(nullable=True)  
+    user_id: Mapped[int] = mapped_column(db.ForeignKey('Users.id'))
+    def __str__(self):
+        return f"SavedVideo(id={self.id}, title={self.title})"
+
 class LocationSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Location
@@ -65,6 +75,12 @@ class LocationSchema(ma.SQLAlchemyAutoSchema):
         include_fk = False # don't include id
         include_relationships = True
         #sqla_session = db.session # connect this to the db schema
+
+class SavedVideoSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = SavedVideo
+        include_fk = False
+        include_relationships = True
 
 def init_app_db():
     """Initialize database tables and add any default entries"""
@@ -78,9 +94,13 @@ def init_app_db():
         db.create_all()
         # create a testing account at app launch
         admin = User(email='test@gcc.edu', password='reallygoodpassword') # type: ignore
-        adminLocation = Location(name = 'UPMC Pediatrics', formal = 'UPMC Pediatrics, Kelly Boulevard, Slippery Rock, PA 16057', address_line1 = 'UPMC Pediatrics', address_line2 = 'Kelly Boulevard, Slippery Rock, PA 16057, United States of America', latitude = 41.07227675, longitude = -80.05449554544492, user='test@gcc.edu') # type: ignore
         db.session.add(admin)
         db.session.commit()
+        adminLocation = Location(name = 'UPMC Pediatrics', formal = 'UPMC Pediatrics, Kelly Boulevard, Slippery Rock, PA 16057', address_line1 = 'UPMC Pediatrics', address_line2 = 'Kelly Boulevard, Slippery Rock, PA 16057, United States of America', latitude = 41.07227675, longitude = -80.05449554544492, user_id=admin.id) 
+        adminVideo1 = SavedVideo(video_url='MPU9HoVhSp8?si=-LspUYCjTf_TgHUy', title='General Pregnancy Advice', video_type='G', user_id=admin.id) 
+        adminVideo2 = SavedVideo(video_url='Jr4nt6XM3gA?si=pmCGFwT5L5mXyAwl', title='Medical Health Tips', video_type='M', user_id=admin.id) 
         db.session.add(adminLocation)
+        db.session.add(adminVideo1)
+        db.session.add(adminVideo2)
         db.session.commit()
     

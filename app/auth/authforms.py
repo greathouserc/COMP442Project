@@ -20,3 +20,12 @@ class RegisterForm(FlaskForm):
         validators=[InputRequired(), Length(min=MIN_PASSWORD_LENGTH)])
     submit: SubmitField = SubmitField("Register")
 
+class ChangePasswordForm(FlaskForm):
+    current_password: PasswordField = PasswordField('Current Password',
+        validators=[InputRequired()])
+    new_password: PasswordField = PasswordField('New Password',
+        validators=[InputRequired(), Length(min=MIN_PASSWORD_LENGTH)])
+    confirm_new_password: PasswordField = PasswordField('Confirm New Password',
+        validators=[InputRequired(), Length(min=MIN_PASSWORD_LENGTH)])
+    submit: SubmitField = SubmitField("Change Password")
+

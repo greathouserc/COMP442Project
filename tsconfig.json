@@ -5,7 +5,8 @@
       "noImplicitAny": true,
       "removeComments": true,
       "preserveConstEnums": true,
-      "sourceMap": false
+      "sourceMap": false,
+      "skipLibCheck": true
     },
     "compileOnSave": true,
     "include": [
