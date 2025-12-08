@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/toast.css') }}" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <title>Help</title>
 </head>
@@ -22,7 +23,7 @@
           <li><a href="#connect">Connect</a></li>
           {% if user.is_authenticated == true %}
           <li style="float: right">
-            <a href="{{ url_for('auth.route_logout') }}">Logout</a>
+            <a href="/profile" title="Profile" style="display: flex; align-items: center;"><img src="{{ url_for('static', filename='images/girl.png') }}" alt="Profile" style="width: 34px; height: 34px;"></a>
           </li>
           {% else %}
           <li style="float: right">
@@ -50,14 +51,25 @@
     <div class="searchButtons">
         <button class="button" id="health-btn">Healthcare</button>
         <button class="button" id="social-btn">Social Services</button>
+        <button class="button" id="childcare-btn">Childcare</button>
+        <button class="button" id="store-btn">Baby Store</button>
+        <button class="button" id="church-btn">Christian Church</button>
+        {% if user.is_authenticated == true %}
+          <button class="button" id="saved-btn">Saved Locations</button>
+        {%endif%}
         <button class="button" id="clear-btn">Clear Map</button>
         <!-- <button class="button" id="transport-btn">Public Transportation</button> -->
     </div>
 
     <p>Click the buttons to reload the map with new locations near you!</p>
+    {% if user.is_authenticated == true %}
+      <p>Save and view your favorite locations!</p>
+    {%endif%}
 
     {% if user.is_authenticated == true %}
-      <button class="btn-primary" id="clear-btn">Save Location</button>
+      <div class="user-btn">
+          <button class="btn-primary" id="save-location-btn">Save Location</button>
+      </div>
     {%endif%}
 
     <div>
@@ -72,5 +84,6 @@
 
   </main>
 </body>
+<script src="{{ url_for('static', filename='js/toast.js') }}"></script>
 
 </html>

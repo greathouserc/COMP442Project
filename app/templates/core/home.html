@@ -22,7 +22,7 @@
           <li><a href="#connect">Connect</a></li>
           {% if user.is_authenticated == true %}
           <li style="float: right">
-            <a href="{{ url_for('auth.route_logout') }}">Logout</a>
+            <a href="/profile" title="Profile" style="display: flex; align-items: center;"><img src="{{ url_for('static', filename='images/girl.png') }}" alt="Profile" style="width: 34px; height: 34px;"></a>
           </li>
           {% else %}
           <li style="float: right">

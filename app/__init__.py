@@ -34,6 +34,7 @@ def create_app(config=Config):
     flask_app.register_blueprint(api_bp, url_prefix='/api')
     # set up Flask-Login for the whole application
     from app.auth.authmodels import User
+    from flask import jsonify, request
     login_manager = LoginManager()
     login_manager.init_app(flask_app)
     login_manager.login_view = 'auth.get_login' # type: ignore
@@ -41,5 +42,11 @@ def create_app(config=Config):
     @login_manager.user_loader
     def load_user(uid: str) -> User|None:
         return User.query.get(uid)
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        # Return JSON for API requests, otherwise redirect to login
+        if request.path.startswith('/api/'):
+            return jsonify({'error': 'Unauthorized'}), 401
+        return flask_app.login_manager.unauthorized()
     # return the manufactured Flask application
     return flask_app

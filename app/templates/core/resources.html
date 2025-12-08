@@ -1,188 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/resources.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/navbar.css') }}"
-    />
-    <title>Resources</title>
-  </head>
 
-  <body class="resources-page">
-    <!-- Navigation Bar -->
-    <header>
-      <div class="navbar-container">
-        <nav id="nav-bar">
-          <ul>
-            <li><a href="/home">Home</a></li>
-            <li><a class="active" href="/resources">Resources</a></li>
-            <li><a href="/help">Find Help</a></li>
-            <li><a href="#connect">Connect</a></li>
-            {% if user.is_authenticated == true %}
-            <li style="float: right">
-              <a href="{{ url_for('auth.route_logout') }}">Logout</a>
-            </li>
-            {% else %}
-            <li style="float: right">
-              <a href="{{ url_for('auth.get_login') }}">Login</a>
-            </li>
-            {% endif %}
-          </ul>
-        </nav>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/resources.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/toast.css') }}" />
+  <title>Resources</title>
+</head>
 
-    <!-- Page Header -->
-    <h1>Resources</h1>
-
-    <!-- General Advice Section -->
-    <h2>General Advice</h2>
-    <div class="iframe-container">
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/Es5tyoL8AsU?si=X13t76E6rwasyW8a"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-    </div>
-
-    <!-- Medical Advice Section -->
-    <h2>Medical Advice and Health</h2>
-    <div class="iframe-container">
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/hpgjwK_oQe0?si=UbAH9IZ6FBQXVWWn"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/PPcWD8Lz7Ck?si=tAxx_inU9Xc3O7r2"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/lKx0sOz31C4?si=Y9muQ6WA5bMDZdVa"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/W-JAVkyTaRk?si=Mc-RURtcxIpl2kxW"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-    </div>
-
-    <!-- Spiritual / Mental Wellbeing Section -->
-    <h2>Spiritual / Mental Wellbeing</h2>
-    <div class="iframe-container">
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/GvgfoAfE30E?si=tEC57WrjjvpV1P1L"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/7w7LwdfNOSo?si=9n750VZt_gCmCZLm"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-
-      <iframe
-        width="280"
-        height="158"
-        src="https://www.youtube.com/embed/BfSzQWKpxHk?si=-yF2bpic97E9XXjN"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      >
-      </iframe>
-    </div>
-
-    <!-- Resource Links Section -->
-    <h2>Need Help Getting Baby Essentials?</h2>
-    <h3>Here are Some Organizations that Provide Free Resources</h3>
-    <h3>Select an option to receive support or additional information</h3>
-
-    <ul>
-      <li>
-        <a href="https://www.fns.usda.gov/wic">
-          A suborganization of the USDA, WIC provides support to expecting
-          mothers in need
-        </a>
-      </li>
-      <li>
-        <a href="https://aeroflowbreastpumps.com/qualify-through-insurance">
-          Aeroflow provides free resources to pregnant moms with qualifying
-          insurance
-        </a>
-      </li>
-      <li>
-        Both Walmart and Target offer free supplies when you start a baby
-        registry with them, no purchase required:
+<body class="resources-page">
+  <!-- Navigation Bar -->
+  <header>
+    <div class="navbar-container">
+      <nav id="nav-bar">
         <ul>
-          <li>
-            <a href="https://www.walmart.com/cp/baby-registry/1229485"
-              >Walmart</a
-            >
+          <li><a href="/home">Home</a></li>
+          <li><a class="active" href="/resources">Resources</a></li>
+          <li><a href="/help">Find Help</a></li>
+          <li><a href="#connect">Connect</a></li>
+          {% if user.is_authenticated == true %}
+          <li style="float: right">
+            <a href="/profile" title="Profile" style="display: flex; align-items: center;"><img src="{{ url_for('static', filename='images/girl.png') }}" alt="Profile" style="width: 34px; height: 34px;"></a>
           </li>
-          <li>
-            <a href="https://www.target.com/gift-registry/create-baby-registry"
-              >Target</a
-            >
+          {% else %}
+          <li style="float: right">
+            <a href="{{ url_for('auth.get_login') }}">Login</a>
           </li>
+          {% endif %}
         </ul>
-      </li>
-    </ul>
-  </body>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <h1>Resources</h1>
+
+  <!-- General Advice Section -->
+  <h2>General Advice</h2>
+  <div id="general-advice"></div>
+
+  <!-- Medical Advice Section -->
+  <h2>Medical Advice and Health</h2>
+  <div id="medical-health"></div>
+
+  <!-- Spiritual / Mental Wellbeing Section -->
+  <h2>Spiritual / Mental Wellbeing</h2>
+  <div id="spiritual-health"></div>
+
+  <!-- Resource Links Section -->
+  <div class="resource-links-section">
+    <h2>Need Help Getting Baby Essentials?</h2>
+    <p class="resources-page-description">Here are some organizations that provide free resources and support to expecting mothers.</p>
+
+    <div class="resource-cards">
+      <div class="resource-card">
+        <h3>WIC Program</h3>
+        <p>A suborganization of the USDA, WIC provides support to expecting mothers in need</p>
+        <a href="https://www.fns.usda.gov/wic" target="_blank" class="resource-link">Learn More →</a>
+      </div>
+
+      <div class="resource-card">
+        <h3>Aeroflow Breastpumps</h3>
+        <p>Provides free resources to pregnant moms with qualifying insurance</p>
+        <a href="https://aeroflowbreastpumps.com/qualify-through-insurance" target="_blank" class="resource-link">Learn More →</a>
+      </div>
+
+      <div class="resource-card">
+        <h3>Baby Registry Programs</h3>
+        <p>Both Walmart and Target offer free supplies when you start a baby registry with them, no purchase required</p>
+        <div class="registry-links">
+          <a href="https://www.walmart.com/cp/baby-registry/1229485" target="_blank" class="resource-link">Walmart →</a>
+          <a href="https://www.target.com/gift-registry/create-baby-registry" target="_blank" class="resource-link">Target →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/resources.js') }}?v=2"></script>
+  <script src="{{ url_for('static', filename='js/toast.js') }}"></script>
+</body>
+
 </html>

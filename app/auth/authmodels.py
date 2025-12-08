@@ -9,8 +9,8 @@ from app import db, ma
 
 class User(UserMixin, db.Model):
     __tablename__ = "Users"
-    # id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    email: Mapped[str] = mapped_column(primary_key = True, nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(nullable=False, unique=True)
     password_hash: Mapped[bytes] = mapped_column(nullable=False)
 
     @property
@@ -46,8 +46,8 @@ class User(UserMixin, db.Model):
 
     @override
     def get_id(self) -> str:
-        """Return the email as the unique identifier for Flask-Login"""
-        return self.email
+        """Return the id as the unique identifier for Flask-Login"""
+        return str(self.id)
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
