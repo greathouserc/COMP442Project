@@ -14,5 +14,4 @@ uvicorn
 email_validator
 sqlalchemy_utils
 leaflet
-@types/geojson
 
