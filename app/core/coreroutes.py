@@ -134,3 +134,11 @@ def contact():
                 flash(f'{getattr(form, field).label.text}: {error}', 'error')
     
     return redirect(url_for('core.index') + '#contact')
+
+@bp.route('connect')
+def connect():
+    return render_template('core/connect.html', user=current_user)
+
+@bp.route('/')
+def root():
+    return redirect(url_for('core.index'))

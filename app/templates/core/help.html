@@ -20,7 +20,7 @@
           <li><a href="/home">Home</a></li>
           <li><a href="/resources">Resources</a></li>
           <li><a class="active" href="/help">Find Help</a></li>
-          <li><a href="#connect">Connect</a></li>
+          <li><a href="/connect">Connect</a></li>
           {% if user.is_authenticated == true %}
           <li style="float: right">
             <a href="/profile" title="Profile" style="display: flex; align-items: center;"><img src="{{ url_for('static', filename='images/girl.png') }}" alt="Profile" style="width: 34px; height: 34px;"></a>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/toast.css') }}" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <title>Help</title>
+</head>
+<body class="help-page">
+<!-- Header & Navigation -->
+  <header>
+    <div class="navbar-container">
+      <nav id="nav-bar">
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/help">Find Help</a></li>
+          <li><a class='active' href="/connect">Connect</a></li>
+          {% if user.is_authenticated == true %}
+          <li style="float: right">
+            <a href="/profile" title="Profile" style="display: flex; align-items: center;"><img src="{{ url_for('static', filename='images/girl.png') }}" alt="Profile" style="width: 34px; height: 34px;"></a>
+          </li>
+          {% else %}
+          <li style="float: right">
+            <a href="{{ url_for('auth.get_login') }}">Login</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div>
+    HELLO WORLD!
+  </div>
+</body>
+</html>
