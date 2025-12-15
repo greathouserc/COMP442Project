@@ -58,30 +58,18 @@
           <button class="button" id="saved-btn">Saved Locations</button>
         {%endif%}
         <button class="button" id="clear-btn">Clear Map</button>
-        <!-- <button class="button" id="transport-btn">Public Transportation</button> -->
     </div>
 
-    <p>Click the buttons to reload the map with new locations near you!</p>
+    
     {% if user.is_authenticated == true %}
-      <p>Save and view your favorite locations!</p>
-    {%endif%}
-
-    {% if user.is_authenticated == true %}
+      <!-- <p>Save and view your favorite locations!</p> -->
       <div class="user-btn">
           <button class="btn-primary" id="save-location-btn">Save Location</button>
       </div>
+    {%else%}
+      <p>Click the buttons to reload the map with new locations near you!</p>
     {%endif%}
-
-    <div>
-
-      <!-- <button class="btn btn-primary" id="health-btn">Healthcare</button>
-      <br>
-      <button class="btn btn-primary" id="social-btn">Social Services</button> -->
-
-      
-    </div>
-
-
+ 
   </main>
 </body>
 <script src="{{ url_for('static', filename='js/toast.js') }}"></script>

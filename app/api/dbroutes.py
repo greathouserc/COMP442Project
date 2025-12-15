@@ -146,11 +146,11 @@ def delete_video(video_id: int):
     
     return jsonify({'message': 'Video deleted successfully'}), 200
 
-@bp.delete('/delete-location/<int:location_id>')
+@bp.delete('/delete-location/<float:location_lat>/<float:location_lon>')
 @login_required
-def delete_location(location_id: int):
+def delete_location(location_lat: float, location_lon: float):
     """Delete a saved location for the current user"""
-    location = db.session.get(Location, location_id)
+    location = db.select(Location).filter(Location.latitude == location_lat).filter(Location.longitude == location_lon)
     
     if not location:
         return jsonify({'error': 'Location not found'}), 404
