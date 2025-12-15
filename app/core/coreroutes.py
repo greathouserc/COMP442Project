@@ -3,8 +3,8 @@ from flask_login import current_user, login_required
 from flask_mail import Message
 from app import db, mail
 from app.core import bp
-from app.core.contactforms import ContactForm
-from app.core.coremodels import Location, SavedVideo
+from app.core.contactforms import ContactForm, GroupForm
+from app.core.coremodels import Location, SavedVideo, ContactGroup, ContactGroupSchema
 import threading
 import smtplib
 import ssl
@@ -134,3 +134,23 @@ def contact():
                 flash(f'{getattr(form, field).label.text}: {error}', 'error')
     
     return redirect(url_for('core.index') + '#contact')
+
+@bp.route('connect', methods=['GET', 'POST'])
+def connect():
+    form = GroupForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        desc = form.description.data
+        group = ContactGroup(name=name, email=email, desc=desc)
+        db.session.add(group)
+        db.session.commit()
+        schema: ContactGroupSchema = ContactGroupSchema()
+    groupData = db.session.execute(db.select(ContactGroup)).all()
+    groups = [group[0] for group in groupData]
+
+    return render_template('core/connect.html', user=current_user, form=form, groups=groups)
+
+@bp.route('/')
+def root():
+    return redirect(url_for('core.index'))
