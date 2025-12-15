@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/connect.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/toast.css') }}" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <title>Help</title>
+  <title>Connect</title>
 </head>
-<body class="help-page">
+<body class="connect-page">
 <!-- Header & Navigation -->
   <header>
     <div class="navbar-container">
@@ -32,8 +32,34 @@
       </nav>
     </div>
   </header>
-  <div>
-    HELLO WORLD!
+  <h1>Connect</h1>
+
+  <h2>Find Support Groups</h2>
+  <div id="groups">
+    {%for group in groups %}
+    <h3>{{group.name}}</h3>
+    <h4>Email: {{group.email}}</h4>
+    <p>{{group.desc}}</p>
+    {% endfor %}
   </div>
+  <h2>Create a Support Group</h2>
+    <form id="group-form" method="POST" action="/connect">
+      {{ form.csrf_token }} 
+      <div>
+        {{ form.name.label }}
+        {{ form.name() }}
+      </div>
+      <div>
+        {{ form.email.label }}
+        {{ form.email() }}
+      </div>
+      <div>
+        {{ form.description.label }}
+        {{ form.description() }}
+      </div>
+      <div>
+        {{ form.submit() }}
+      </div>
+    </form>
 </body>
 </html>
