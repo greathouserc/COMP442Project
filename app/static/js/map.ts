@@ -293,30 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.style.backgroundColor = "#4CAF50";
     }
 
-    function getLocation(): Promise<Array<number>>{
-        let latitude = 41.1558;
-        let longitude = -80.0815;
-
-        return new Promise(resolve => {
-            if(navigator.geolocation){
-                navigator.geolocation.getCurrentPosition((position) => {
-                    latitude = position.coords.latitude;
-                    longitude = position.coords.longitude;
-                    // console.log(latitude);
-                    // console.log(longitude);
-                }, (error) => {
-                    console.error(`Error in getting location: ${error}`);
-                });
-            }else{
-                console.error("This browser does not support geolocation.");
-            }
-
-            console.log([latitude, longitude]);
-
-            return [latitude, longitude];
-        });
-    }
-
 
 });
  
