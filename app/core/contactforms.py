@@ -10,9 +10,3 @@ class ContactForm(FlaskForm):
     message: StringField = StringField('Message', validators=[InputRequired(), Length(max=2000)])
     submit: SubmitField = SubmitField("Send Message")
 
-class GroupForm(FlaskForm):
-    name: StringField = StringField('Group Name', validators=[InputRequired(), Length(max=50)])
-    email: EmailField = EmailField('Group Email', validators=[InputRequired(), Length(max=50)])
-    description: StringField = StringField('Group Description', validators=[InputRequired(), Length(max=2000)])
-    submit: SubmitField = SubmitField("Create Group")
-

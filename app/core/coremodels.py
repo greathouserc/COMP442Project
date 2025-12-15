@@ -82,17 +82,6 @@ class SavedVideoSchema(ma.SQLAlchemyAutoSchema):
         include_fk = False
         include_relationships = True
 
-class ContactGroup(db.Model):
-    __tablename__ = "ContactGroup"
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(nullable=False)
-    email: Mapped[str] = mapped_column(nullable=False)
-    desc: Mapped[str] = mapped_column(nullable=False)
-
-class ContactGroupSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = ContactGroup
-
 def init_app_db():
     """Initialize database tables and add any default entries"""
     # completely drop all tables and re-create them from schemas
