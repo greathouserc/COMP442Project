@@ -1,0 +1,87 @@
+File filter
+.connect-page, .connect-page html, .connect-page body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.connect-page {
+    margin: 0;
+    font-family: "Fira Sans", sans-serif;
+    line-height: 1.6;
+}
+
+.connect-page h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 2rem 1rem 0;
+}
+
+.connect-page h2 {
+    color: #4CAF50;
+    font-size: 1.8rem;
+    margin: 2rem auto 1.5rem;
+    border-bottom: 3px solid #4CAF50;
+    padding-bottom: 0.5rem;
+    max-width: 1200px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.groups {
+    margin-left: 20px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.contact-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
