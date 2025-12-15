@@ -3,6 +3,8 @@
 //     LatLngBounds, LayerGroup, LatLngExpression, geoJson, Browser} from 'leaflet';
 //import 'leaflet/dist/leaflet.css';
 
+import { latLng, LatLng, LatLngBounds } from "leaflet";
+
 
 declare const L: any;
 
@@ -37,22 +39,26 @@ document.addEventListener("DOMContentLoaded", () => {
     //     zoom: 10
     // };
 
-
     let lat = 41.1558;
     let lon = -80.0815;
 
-    const coords = getLocation();
-    coords.then(function(nums: Array<number>){
-        lat = nums.at(0);
-        lon = nums.at(1);
-    });
+    const my_map = L.map(element);
 
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((position) => {
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+            console.log("Using current device location:" + [lat, lon]);
+            my_map.setView([lat, lon], 10);
+        }, (error) => {
+            console.error(`Error in getting location: ${error}`);
+        });
+    }else{
+        console.error("This browser does not support geolocation.");
+        console.log("Using default:" + [lat, lon]);
+        my_map.setView([lat, lon], 10);
+    }
 
-    console.log(lat);
-    console.log(lon);
-
-
-    const my_map = L.map(element).setView([lat, lon], 10);
     //API key
     const myAPIKey = "09d5b6e52d8946efab4b009650b3b211";
 
@@ -81,10 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const clearBtn = document.getElementById("clear-btn") as HTMLAnchorElement | null;
 
     const saveLocBtn = document.getElementById("save-location-btn") as HTMLAnchorElement | null;
-
-    // // // let healthOn = false;
-
-    let cats = "";
 
     if (healthBtn) {
         healthBtn.addEventListener("click", (event: MouseEvent) => {
@@ -145,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (saveLocBtn) {
+
         saveLocBtn.addEventListener("click", async (event: MouseEvent) => {
             console.log("Save Location button clicked");
             
@@ -180,42 +183,38 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-
-
-
-    //healthcare.clinic_or_praxis.paediatrics
-    //commercial.health_and_beauty.medical_supply
-    //commercial.health_and_beauty.pharmacy
-
-    //         if(healthOn){
-    //             if(categories === ""){
-    //                 categories = "healthcare.clinic_or_praxis.gynaecology";
-    //             }else{
-    //                 categories = categories + ",healthcare.clinic_or_praxis.gynaecology";
-    //             }
-    //             healthOn = false;
-    //         }else{
-    //             healthOn = true;
-    //         }
-
-    //let searchUrl = "https://api.geoapify.com/v2/places?categories={categories}&filter=rect:${rect}&limit=100&apiKey={myAPIKey}"
-
-    // async function loadMap(){
-    //     const baseUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey={myAPIKey}";
-
-    //     //map tile layer
-    //     tileLayer(baseUrl, {
-    //         attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" rel="nofollow" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" rel="nofollow" target="_blank">© OpenStreetMap</a> contributors',
-    //         maxZoom: 20,
-    //         id: 'osm-bright',
-    //     }).addTo(my_map);
-    // }
     
     async function loadPlaces(cats: string){
         //const bounds: LatLngBounds = my_map.getBounds(); 41.1558, -80.0815 -78.09921757581298,38.73660286449031,-82.07762874146101,43.58987145915573&limit
         const bounds = my_map.getBounds();
         const rect = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`;
         const searchUrl = `https://api.geoapify.com/v2/places?categories=${cats}&filter=rect:${rect}&limit=100&apiKey=09d5b6e52d8946efab4b009650b3b211`;
+
+        if(!L.resultsLayer){
+            resultsLayer.clearLayers();
+            resultsLayer = L.layerGroup().addTo(my_map);
+        } else {
+            resultsLayer.clearLayers();
+        }
+
+        const imageURL = 'http://127.0.0.1:5000/static/images/loading.png';
+        const altText = 'Loading symbol.';
+        //const southwest = [bounds.getWest(), bounds.getSouth()];
+        //const northeast = [bounds.getEast(), bounds.getNorth()];
+        // const southwest: L.LatLng = new L.LatLng(bounds.getWest(), bounds.getSouth());
+        // const northeast: L.LatLng = new L.LatLng(bounds.getEast(), bounds.getNorth());
+        //const imageBounds: L.LatLngBounds = new L.LatLngBounds(southwest, northeast);
+        //const imageBounds = [southwest, northeast];
+        const imageBounds = bounds;
+        // console.log(imageBounds[0]);
+
+        const imageOverlay = L.imageOverlay(imageURL, imageBounds, {
+            opacity: 0.8,
+            alt: altText,
+            interactive: false
+        }).addTo(my_map);
+
+        imageOverlay.addTo(resultsLayer);
 
         const response = await fetch(searchUrl);
         if(!response.ok){
@@ -225,6 +224,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Places loaded: ", data);
         renderPlaces(data);
+
+        //imageOverlay.setOpacity(0.0);
     }
 
     function markericonUrl(iconName = "map-marker", color = "greenyellow"){
@@ -284,32 +285,39 @@ document.addEventListener("DOMContentLoaded", () => {
         childcareBtn.style.backgroundColor = "#333333";
         storeBtn.style.backgroundColor = "#333333";
         churchBtn.style.backgroundColor = "#333333";
-        savedBtn.style.backgroundColor = "#333333";
-        clearBtn.style.backgroundColor = "#333333";
+        if(savedBtn){
+            savedBtn.style.backgroundColor = "#333333";
+        }
+        clearBtn.style.backgroundColor ="#00bfffff";
 
         btn.style.backgroundColor = "#4CAF50";
     }
 
-    async function getLocation(): Promise<Array<number>>{
-        let latitude: number;
-        let longitude: number;
+    function getLocation(): Promise<Array<number>>{
+        let latitude = 41.1558;
+        let longitude = -80.0815;
 
-        if(navigator.geolocation){
-            navigator.geolocation.getCurrentPosition((position) => {
-                latitude = position.coords.latitude;
-                longitude = position.coords.longitude;
-                console.log(latitude);
-                console.log(longitude);
-                return [latitude, longitude];
-            }, (error) => {
-                console.error(`Error in getting location: ${error}`);
-            });
-        }else{
-                console.error("This browser does not support geolocation.")
-        }
+        return new Promise(resolve => {
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition((position) => {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    // console.log(latitude);
+                    // console.log(longitude);
+                }, (error) => {
+                    console.error(`Error in getting location: ${error}`);
+                });
+            }else{
+                console.error("This browser does not support geolocation.");
+            }
 
-        return [latitude, longitude];
+            console.log([latitude, longitude]);
+
+            return [latitude, longitude];
+        });
     }
+
+
 });
  
 
