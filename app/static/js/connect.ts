@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function submitGroup(event: Event): Promise<void> {
-    event.preventDefault()
 
     const form = <HTMLFormElement> document.getElementById('group-form')
     const groups = <HTMLDivElement> document.getElementById('groups')
@@ -17,5 +16,5 @@ async function submitGroup(event: Event): Promise<void> {
         method: form.method,
         body: formData
     }).then(validateJSON)
-
+    
 }
