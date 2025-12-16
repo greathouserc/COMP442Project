@@ -44,6 +44,7 @@ def connect():
         group = ContactGroup(name=name, email=email, desc=desc)
         db.session.add(group)
         db.session.commit()
+        return redirect(url_for('core.connect'))
     groupData = db.session.execute(db.select(ContactGroup)).all()
     groups = [group[0] for group in groupData]
 
